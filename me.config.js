@@ -1,6 +1,12 @@
 /**
- * Everything printed by `npx atalay` lives here.
- * Edit this file, open a PR, or just fork and run it locally.
+ * This is the card that `npx huryasar` prints.
+ *
+ * Fork this project, edit this one file, and publish your own.
+ * Only the keys you set are used — everything omitted falls back to
+ * `src/default.js`, so a minimal config can be as short as a name and a URL.
+ *
+ * Markup available in `intro` lines:
+ *   *bold accent*   _dim_   `highlight`   {label|url}
  */
 
 export const profile = {
@@ -8,9 +14,9 @@ export const profile = {
   handle: '@atalayhuryasar',
   title: 'Creative Technologist',
   location: 'Somewhere in Asia',
-  pronouns: null, // set to a string to display next to the name
+  pronouns: null,
 
-  ascii: String.raw`
+  ascii: `
         ▄▄▄▄▄▄
       ▄█████████▄▄
      ██████████████
@@ -24,12 +30,6 @@ export const profile = {
     .replace(/^\n/, '')
     .replace(/\s+$/, ''),
 
-  // Mini markup used by the intro paragraphs (they are re-wrapped to the
-  // terminal width at render time, so write them as flowing text):
-  //   *text*      -> bold accent
-  //   _text_      -> dim
-  //   `text`      -> magenta highlight
-  //   {text|url}  -> link text, opened on click in the menu view
   intro: [
     'Hello, this is *Atalay Hüryaşar*, a `Creative Technologist`.',
     '',
@@ -40,13 +40,6 @@ export const profile = {
     '_Say hi, I do not bite._',
   ],
 
-  stats: [
-    ['GitHub', 'github.com/atalayhuryasar'],
-    ['Web', 'huryasar.com'],
-    ['Mail', 'adematalayhuryasar@gmail.com'],
-  ],
-
-  // Items shown in the interactive menu.
   menu: [
     {
       icon: '🐙',
@@ -74,9 +67,9 @@ export const profile = {
     },
     {
       icon: '⭐',
-      label: 'Star this card',
+      label: 'Star this project',
       hint: 'GitHub',
-      url: 'https://github.com/atalayhuryasar/atalay',
+      url: 'https://github.com/atalayhuryasar/terminal-card',
     },
   ],
 

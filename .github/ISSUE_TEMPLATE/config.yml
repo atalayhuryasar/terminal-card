@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/atalayhuryasar/terminal-card/discussions
+    about: Ask how to use the card or configure your own me.config.js
+  - name: Security report
+    url: https://github.com/atalayhuryasar/terminal-card/blob/main/SECURITY.md
+    about: Report a vulnerability privately instead of in a public issue

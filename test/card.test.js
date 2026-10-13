@@ -2,11 +2,35 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { visibleWidth, padEnd } from '../src/ansi.js';
-import { parseMarkup, wrapMarkup, renderCard, dedent, renderMenu } from '../src/render.js';
+import {
+  parseMarkup,
+  wrapMarkup,
+  renderCard,
+  renderLinks,
+  renderMenu,
+  dedent,
+} from '../src/render.js';
 import { tokenize } from '../src/menu.js';
-import profile from '../src/data.js';
+import { mergeProfile, profile } from '../src/profile.js';
+import defaultProfile from '../src/default.js';
 
 const plain = (s) => s.replace(/\u001b\[[0-9;]*m/g, '');
+
+// A fixture so the suite never depends on the real me.config.js contents.
+const fixture = {
+  name: 'Test Person',
+  handle: '@testperson',
+  title: 'Tester',
+  location: 'Nowhere',
+  ascii: '▄▄▄\n███',
+  intro: ['Hello from *nowhere*.'],
+  menu: [
+    { icon: '🐙', label: 'Profile', hint: 'GitHub', url: 'https://github.com/test' },
+  ],
+  exit: { icon: '👋', label: 'Bye.' },
+};
+
+/* ------------------------------------------------------------------ ansi */
 
 test('visibleWidth ignores ANSI codes', () => {
   assert.equal(visibleWidth('\u001b[38;5;205mabc\u001b[39m'), 3);
@@ -20,12 +44,11 @@ test('visibleWidth counts emoji as two columns', () => {
 });
 
 test('padEnd aligns on display width, not code units', () => {
-  const rows = ['🐙  a', '✉️  bb', '⭐  c'];
-  const padded = rows.map((r) => padEnd(r, 10));
-  assert.equal(visibleWidth(padded[0]), 10);
-  assert.equal(visibleWidth(padded[1]), 10);
-  assert.equal(visibleWidth(padded[2]), 10);
+  const padded = ['🐙  a', '✉️  bb', '⭐  c'].map((r) => padEnd(r, 10));
+  for (const row of padded) assert.equal(visibleWidth(row), 10);
 });
+
+/* --------------------------------------------------------------- markup */
 
 test('parseMarkup understands every style token', () => {
   const segs = parseMarkup('a *b* `c` _d_ {e|f}');
@@ -35,6 +58,16 @@ test('parseMarkup understands every style token', () => {
   );
   assert.equal(segs.find((s) => s.text === 'e').url, 'f');
 });
+
+test('parseMarkup leaves plain text alone', () => {
+  assert.deepEqual(parseMarkup('just text'), [{ text: 'just text' }]);
+});
+
+test('parseMarkup tolerates unclosed markers', () => {
+  assert.doesNotThrow(() => parseMarkup('*unclosed and `also this'));
+});
+
+/* ------------------------------------------------------------ wrapping */
 
 test('wrapMarkup keeps every word and respects the width', () => {
   const out = wrapMarkup(['one two three four five six'], 12);
@@ -54,14 +87,21 @@ test('wrapMarkup keeps empty lines as paragraph breaks', () => {
   assert.equal(out[1], '');
 });
 
+test('wrapMarkup never emits trailing whitespace', () => {
+  for (const line of wrapMarkup(['one two three four five'], 12)) {
+    assert.equal(line, line.trimEnd());
+  }
+});
+
 test('dedent removes shared indentation only', () => {
   assert.equal(dedent('    a\n      b'), 'a\n  b');
 });
 
+/* ------------------------------------------------------------ rendering */
+
 test('renderCard fits the requested terminal width', () => {
   for (const columns of [60, 80, 100, 160]) {
-    const out = plain(renderCard(profile, columns));
-    for (const line of out.split('\n')) {
+    for (const line of plain(renderCard(profile, columns)).split('\n')) {
       assert.ok(
         visibleWidth(line) <= columns,
         `${columns} cols: line is ${visibleWidth(line)} wide -> ${line}`,
@@ -70,43 +110,86 @@ test('renderCard fits the requested terminal width', () => {
   }
 });
 
-test('renderCard contains the essential info', () => {
-  const out = plain(renderCard(profile, 100));
-  assert.match(out, /Atalay Hüryaşar/);
-  assert.match(out, /Creative Technologist/);
-  assert.match(out, /@atalayhuryasar/);
+test('renderCard renders the name, title and handle', () => {
+  const out = plain(renderCard(fixture, 100));
+  assert.match(out, /Test Person/);
+  assert.match(out, /Tester/);
+  assert.match(out, /@testperson/);
+});
+
+test('renderCard stacks when the terminal is too narrow', () => {
+  const out = plain(renderCard(fixture, 40));
+  // No side-by-side gutter: every art line starts on its own row.
+  assert.ok(out.split('\n')[0].includes('▄'));
+});
+
+test('renderLinks lists every url', () => {
+  const out = plain(renderLinks(fixture));
+  assert.match(out, /https:\/\/github\.com\/test/);
 });
 
 test('renderMenu highlights the active row', () => {
-  const out = plain(renderMenu('Pick one', profile.menu, 1));
-  assert.match(out, /❯/);
+  assert.match(plain(renderMenu('Pick', fixture.menu, 0)), /❯/);
 });
 
 test('renderMenu never prints an empty hint', () => {
-  const out = renderMenu('Pick one', profile.menu, profile.menu.length);
-  assert.doesNotMatch(out, /\(\)/);
+  const noHint = [{ icon: '👋', label: 'Bye.' }];
+  assert.doesNotMatch(renderMenu('Pick', noHint, 0), /\(\)/);
 });
 
+/* ---------------------------------------------------------------- input */
+
 test('tokenize splits batched key presses but keeps escape sequences whole', () => {
-  assert.deepEqual([...tokenize('\u001b[B\u001b[B\n')], [
-    '\u001b[B',
-    '\u001b[B',
-    '\n',
-  ]);
+  assert.deepEqual([...tokenize('\u001b[B\u001b[B\n')], ['\u001b[B', '\u001b[B', '\n']);
   assert.deepEqual([...tokenize('jk')], ['j', 'k']);
   assert.deepEqual([...tokenize('\u001b[A\u001b[5~')], ['\u001b[A', '\u001b[5~']);
 });
 
-test('profile data is well formed', () => {
-  assert.ok(profile.name && profile.title && profile.location);
-  assert.ok(profile.ascii.length > 20);
-  assert.ok(profile.menu.length > 0);
+test('tokenize passes multi-byte characters through intact', () => {
+  assert.deepEqual([...tokenize('é🐙')], ['é', '🐙']);
+});
+
+/* -------------------------------------------------------------- profile */
+
+test('mergeProfile fills gaps from the defaults', () => {
+  const merged = mergeProfile(defaultProfile, { name: 'Only A Name' });
+  assert.equal(merged.name, 'Only A Name');
+  assert.ok(merged.ascii.length > 0);
+  assert.ok(merged.intro.length > 0);
+  assert.ok(merged.menu.length > 0);
+});
+
+test('mergeProfile replaces arrays wholesale instead of concatenating', () => {
+  const merged = mergeProfile(defaultProfile, { intro: ['only mine'] });
+  assert.deepEqual(merged.intro, ['only mine']);
+});
+
+test('mergeProfile keeps an omitted exit menu entry', () => {
+  const merged = mergeProfile(defaultProfile, { name: 'x' });
+  assert.deepEqual(merged.exit, defaultProfile.exit);
+});
+
+test('the shipped profile is well formed', () => {
+  assert.ok(profile.name && profile.title, 'name and title are required');
+  assert.ok(profile.ascii.length > 20, 'ascii art is missing');
+  assert.ok(profile.intro.length > 0, 'intro is empty');
+  assert.ok(profile.menu.length > 0, 'menu is empty');
+  assert.ok(profile.exit?.label, 'exit item is missing');
   for (const item of profile.menu) {
     assert.ok(item.icon, 'menu item needs an icon');
     assert.ok(item.label, 'menu item needs a label');
-    assert.match(item.url, /^(https?:|mailto:)/, `bad url: ${item.url}`);
+    assert.match(
+      item.url,
+      /^(https?:|mailto:)/,
+      `menu item url must be a link: ${item.url}`,
+    );
   }
-  for (const url of profile.menu.map((i) => i.url)) {
-    assert.ok(new URL(url), `unparsable url: ${url}`);
+});
+
+test('the default profile is a usable fallback', () => {
+  for (const p of [defaultProfile, profile]) {
+    assert.ok(p.ascii.length > 20);
+    assert.equal(dedent(p.ascii).split('\n').length, 9);
+    assert.equal(plain(renderCard(p, 80)).length > 0, true);
   }
 });

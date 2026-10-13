@@ -15,7 +15,9 @@ const clearToEnd = () => process.stdout.write(`${ESC}[0J`);
 export function* tokenize(chunk) {
   let i = 0;
   while (i < chunk.length) {
-    if (chunk[i] === ESC) {
+    // Read whole code points: indexing by UTF-16 unit would split emoji.
+    const ch = String.fromCodePoint(chunk.codePointAt(i));
+    if (ch === ESC) {
       const match = /^\u001b(\[[0-9;]*[a-zA-Z~]|O[A-Za-z])/.exec(chunk.slice(i));
       if (match) {
         yield match[0];
@@ -26,8 +28,8 @@ export function* tokenize(chunk) {
       i += 1;
       continue;
     }
-    yield chunk[i];
-    i += 1;
+    yield ch;
+    i += ch.length;
   }
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import profile from '../src/data.js';
+import { profile } from '../src/profile.js';
 import { renderCard, renderLinks } from '../src/render.js';
 import { browse } from '../src/menu.js';
 import { bold, dim, fgGreen } from '../src/ansi.js';

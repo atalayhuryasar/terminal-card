@@ -1,4 +1,16 @@
-node_modules/
-*.log
+node_modules
+
+# Editors
 .DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
 .env
+.env.*

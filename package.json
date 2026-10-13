@@ -1,36 +1,36 @@
 {
-  "name": "atalay",
+  "name": "huryasar",
   "version": "1.0.0",
-  "description": "Atalay Hüryaşar's terminal business card. Run `npx atalay` in your terminal.",
+  "description": "My terminal business card. Run `npx huryasar`.",
   "keywords": [
     "cli",
     "card",
     "business-card",
     "profile",
-    "me",
-    "atalay",
-    "huryasar",
     "terminal",
     "banner",
-    "ascii"
+    "ascii",
+    "cli-me",
+    "npx"
   ],
-  "homepage": "https://github.com/atalayhuryasar/atalay#readme",
+  "homepage": "https://github.com/atalayhuryasar/terminal-card#readme",
   "bugs": {
-    "url": "https://github.com/atalayhuryasar/atalay/issues"
+    "url": "https://github.com/atalayhuryasar/terminal-card/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atalayhuryasar/atalay.git"
+    "url": "git+https://github.com/atalayhuryasar/terminal-card.git"
   },
   "license": "MIT",
   "author": "Atalay Hüryaşar <adematalayhuryasar@gmail.com> (https://github.com/atalayhuryasar)",
   "type": "module",
   "bin": {
-    "atalay": "bin/atalay.js"
+    "huryasar": "bin/card.js"
   },
   "files": [
     "bin",
     "src",
+    "me.config.js",
     "README.md",
     "LICENSE"
   ],
@@ -38,8 +38,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "node bin/atalay.js",
-    "test": "node --test test/"
+    "start": "node bin/card.js",
+    "test": "node --test test/",
+    "prepublishOnly": "npm test"
   },
   "publishConfig": {
     "access": "public"

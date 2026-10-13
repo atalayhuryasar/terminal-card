@@ -12,7 +12,7 @@ import {
   padStart,
   colorEnabled,
 } from './ansi.js';
-import profile from './data.js';
+import { profile } from './profile.js';
 
 const ACCENT = [255, 95, 175]; // hot pink
 const ACCENT_END = [120, 130, 255]; // soft violet
@@ -27,7 +27,7 @@ const mix = (a, b, t) => [
 const slice = (s) => s.slice(1, s.length - 1);
 
 /**
- * Parse the mini markup used in data.js into styled segments.
+ * Parse the mini markup used in `me.config.js` into styled segments.
  *   *bold accent*   _dim_   `highlight`   {label|url}
  */
 export function parseMarkup(line) {
