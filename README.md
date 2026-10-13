@@ -95,7 +95,7 @@ the URLs in `repository` / `bugs` / `homepage`:
 **4. Publish**
 
 ```bash
-npm test        # make sure it still renders
+npm test              # make sure it still renders
 npm publish
 ```
 
@@ -176,8 +176,9 @@ It is dedented automatically, so you do not have to align it with the code.
 
 ## How it behaves
 
-- **Adapts to your terminal.** The card re-wraps to the current width, and
-  falls back to a stacked layout on narrow terminals.
+- **Adapts to your terminal.** The card re-wraps to the current width. Wide
+  terminals get the portrait beside the card, narrow ones stack it on top, and
+  very narrow ones drop the decoration rather than overflow.
 - **Emoji are measured correctly.** `🐙 ✉️ ⭐` count as two columns, so the
   menu stays aligned.
 - **Pipes cleanly.** When stdout is not a terminal the colours are dropped and
@@ -198,16 +199,18 @@ src/render.js      markup parsing, wrapping, layout
 src/menu.js        arrow-key menu and key decoding
 src/ansi.js        colour and display-width helpers
 src/open.js        cross-platform "open this link"
-test/              node:test suite, no dependencies
+test/card.test.js  node:test suite, no dependencies
+test/width-check.js  overflow guard, also used by CI
 ```
 
 ## Contributing
 
 Issues and pull requests are welcome — see
-[CONTRIBUTING.md](CONTRIBUTING.md). Run the tests before opening a PR:
+[CONTRIBUTING.md](CONTRIBUTING.md). Run the checks before opening a PR:
 
 ```bash
-npm test
+npm test              # 29 tests
+node test/width-check.js   # no line overflows at any terminal width
 ```
 
 ## License

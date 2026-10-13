@@ -1,6 +1,6 @@
 {
   "name": "huryasar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "My terminal business card. Run `npx huryasar`.",
   "keywords": [
     "cli",
@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "node bin/card.js",
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "prepublishOnly": "npm test"
   },
   "publishConfig": {

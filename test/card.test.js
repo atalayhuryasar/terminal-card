@@ -5,6 +5,8 @@ import { visibleWidth, padEnd } from '../src/ansi.js';
 import {
   parseMarkup,
   wrapMarkup,
+  wrapSegments,
+  renderSegments,
   renderCard,
   renderLinks,
   renderMenu,
@@ -76,9 +78,53 @@ test('wrapMarkup keeps every word and respects the width', () => {
   assert.equal(out.join(' ').replace(/\s+/g, ' '), 'one two three four five six');
 });
 
-test('wrapMarkup does not break words that span styled segments', () => {
-  const out = wrapMarkup(['*Creative Technologist* rocks'], 10);
-  assert.equal(out.join(' ').replace(/\s+/g, ' '), 'Creative Technologist rocks');
+test('wrapSegments keeps a word that spans styled segments whole when it fits', () => {
+  // One word, three segments with different styles.
+  const row = [
+    { text: 'Tech', style: 'name' },
+    { text: 'nolog', style: 'bold' },
+    { text: 'ist', style: 'highlight' },
+    { text: ' rocks' },
+  ];
+  const out = wrapSegments([row], 40).map(renderSegments);
+  assert.equal(out.join(' ').replace(/\s+/g, ' '), 'Technologist rocks');
+  assert.equal(out.length, 1, 'should not wrap');
+});
+
+test('wrapSegments breaks a spanning word across lines without splitting a segment', () => {
+  const row = [
+    { text: 'Tech', style: 'name' },
+    { text: 'nologist', style: 'bold' },
+  ];
+  const out = wrapSegments([row], 6).map(renderSegments);
+  assert.equal(out.join(''), 'Technologist');
+  for (const line of out) assert.ok(visibleWidth(line) <= 6);
+});
+
+test('wrapMarkup breaks a word that cannot fit, without losing characters', () => {
+  const source = 'supercalifragilistic';
+  const out = wrapMarkup([`*${source}* end`], 10);
+  assert.equal(out.join(''), source + 'end');
+  for (const line of out) assert.ok(visibleWidth(line) <= 10);
+});
+
+test('wrapMarkup still places later words after a broken word', () => {
+  const out = wrapMarkup(['supercalifragilistic end'], 10);
+  assert.equal(out.join(''), 'supercalifragilisticend');
+  assert.ok(out.length >= 2);
+});
+
+test('wrapMarkup preserves styling when breaking a long word', () => {
+  const rows = wrapSegments([parseMarkup('*abcdefghijkl*')], 5);
+  // 12 characters at 5 columns: 5 + 5 + 2, every fragment still bold.
+  assert.equal(rows.length, 3);
+  for (const row of rows) {
+    assert.ok(row.length > 0);
+    for (const segment of row) assert.equal(segment.style, 'bold');
+  }
+  const lines = rows.map(renderSegments);
+  assert.equal(lines.join(''), 'abcdefghijkl');
+  for (const line of lines) assert.ok(visibleWidth(line) <= 5);
 });
 
 test('wrapMarkup keeps empty lines as paragraph breaks', () => {
@@ -99,15 +145,41 @@ test('dedent removes shared indentation only', () => {
 
 /* ------------------------------------------------------------ rendering */
 
-test('renderCard fits the requested terminal width', () => {
-  for (const columns of [60, 80, 100, 160]) {
-    for (const line of plain(renderCard(profile, columns)).split('\n')) {
-      assert.ok(
-        visibleWidth(line) <= columns,
-        `${columns} cols: line is ${visibleWidth(line)} wide -> ${line}`,
-      );
+test('renderCard never overflows, at any terminal width', () => {
+  // Every width from "phone-sized" to ultrawide, with the real profile and a
+  // deliberately hostile one (long url, long unbroken word).
+  const hostile = {
+    ...fixture,
+    intro: [
+      'https://example.com/a/very/long/path/that/never/ends?query=1&other=2',
+      'supercalifragilisticexpialidocious',
+      '*styled* `highlight` _dim_ {link label|https://example.com}',
+    ],
+    menu: [
+      {
+        icon: '🐙',
+        label: 'An extremely long menu entry label for testing',
+        hint: 'GitHub',
+        url: 'https://example.com/very/long/url',
+      },
+    ],
+  };
+
+  for (const p of [profile, fixture, hostile]) {
+    for (let columns = 6; columns <= 200; columns++) {
+      for (const line of plain(renderCard(p, columns)).split('\n')) {
+        assert.ok(
+          visibleWidth(line) <= columns,
+          `${columns} cols: line is ${visibleWidth(line)} wide -> ${JSON.stringify(line)}`,
+        );
+      }
     }
   }
+});
+
+test('renderCard keeps the art until the terminal is too narrow for it', () => {
+  assert.ok(plain(renderCard(fixture, 80)).includes('▄'), 'art shown when it fits');
+  assert.ok(!plain(renderCard(fixture, 10)).includes('▄'), 'art dropped when it cannot');
 });
 
 test('renderCard renders the name, title and handle', () => {

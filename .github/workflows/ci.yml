@@ -47,9 +47,27 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Card fits a narrow terminal
-        run: node bin/card.js --no-menu | awk 'length > 60 { exit 1 }'
+      - name: Card honours COLUMNS when piped
+        run: |
+          for w in 20 40 80 120; do
+            COLUMNS=$w node bin/card.js --no-menu > "out-$w.txt"
+          done
+
+      # awk counts bytes, not columns: box-drawing characters are 3 bytes each,
+      # so the overflow check has to measure display width in JavaScript.
+      - name: No line overflows its terminal width
+        run: node test/width-check.js
 
       - name: Card honours NO_COLOR
         run: |
-          NO_COLOR=1 node bin/card.js --links | grep -q $'\x1b' && exit 1 || exit 0
+          NO_COLOR=1 node bin/card.js --links > out.txt
+          if grep -qP '\x1b' out.txt; then
+            echo "escape codes leaked with NO_COLOR set"
+            exit 1
+          fi
+
+      - name: Card is a valid JSON profile
+        run: node bin/card.js --json | node -e '
+          const p = JSON.parse(require("fs").readFileSync(0, "utf8"));
+          if (!p.name || !p.menu?.length) { console.error("incomplete profile"); process.exit(1); }
+        '

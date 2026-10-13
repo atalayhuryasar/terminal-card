@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
+### Added
+
+- `me.config.js`: the card is now a single editable config file, with
+  `src/default.js` filling in anything a config omits.
+- `terminalWidth()` honours `COLUMNS` when output is piped, so the layout is
+  predictable in CI and when writing output to a file.
+- Overflow guard (`test/width-check.js`) used by CI.
+
+### Fixed
+
+- Long words and URLs are broken instead of overflowing the card.
+- The header now wraps with the body, so a long title or handle no longer
+  widens the box past the terminal.
+- Key decoding handles batched input and multi-byte characters.
+- `npm test` no longer depends on a Node-version-specific test argument.
+
 ## [1.0.0]
 
 ### Added
@@ -23,5 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Respect for `NO_COLOR`, `FORCE_COLOR`, `TERM=dumb` and `ATALAY_NO_OPEN`.
 - Test suite covering markup parsing, wrapping, layout width and key decoding.
 
-[Unreleased]: https://github.com/atalayhuryasar/terminal-card/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/atalayhuryasar/terminal-card/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/atalayhuryasar/terminal-card/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/atalayhuryasar/terminal-card/releases/tag/v1.0.0
