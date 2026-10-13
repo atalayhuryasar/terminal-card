@@ -1,0 +1,47 @@
+{
+  "name": "atalay",
+  "version": "1.0.0",
+  "description": "Atalay Hüryaşar's terminal business card. Run `npx atalay` in your terminal.",
+  "keywords": [
+    "cli",
+    "card",
+    "business-card",
+    "profile",
+    "me",
+    "atalay",
+    "huryasar",
+    "terminal",
+    "banner",
+    "ascii"
+  ],
+  "homepage": "https://github.com/atalayhuryasar/atalay#readme",
+  "bugs": {
+    "url": "https://github.com/atalayhuryasar/atalay/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atalayhuryasar/atalay.git"
+  },
+  "license": "MIT",
+  "author": "Atalay Hüryaşar <adematalayhuryasar@gmail.com> (https://github.com/atalayhuryasar)",
+  "type": "module",
+  "bin": {
+    "atalay": "bin/atalay.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node bin/atalay.js",
+    "test": "node --test test/"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
