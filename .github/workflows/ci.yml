@@ -67,7 +67,6 @@ jobs:
           fi
 
       - name: Card is a valid JSON profile
-        run: node bin/card.js --json | node -e '
-          const p = JSON.parse(require("fs").readFileSync(0, "utf8"));
-          if (!p.name || !p.menu?.length) { console.error("incomplete profile"); process.exit(1); }
-        '
+        run: |
+          node bin/card.js --json > profile.json
+          node -e "const p=require('./profile.json'); if(!p.name||!p.menu?.length){console.error('incomplete profile'); process.exit(1)}; console.log('profile ok:', p.name)"
