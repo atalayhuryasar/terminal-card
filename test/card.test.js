@@ -10,7 +10,6 @@ import {
   renderCard,
   renderLinks,
   renderMenu,
-  dedent,
 } from '../src/render.js';
 import { tokenize } from '../src/menu.js';
 import { mergeProfile, profile } from '../src/profile.js';
@@ -24,7 +23,6 @@ const fixture = {
   handle: '@testperson',
   title: 'Tester',
   location: 'Nowhere',
-  ascii: '▄▄▄\n███',
   intro: ['Hello from *nowhere*.'],
   menu: [
     { icon: '🐙', label: 'Profile', hint: 'GitHub', url: 'https://github.com/test' },
@@ -139,10 +137,6 @@ test('wrapMarkup never emits trailing whitespace', () => {
   }
 });
 
-test('dedent removes shared indentation only', () => {
-  assert.equal(dedent('    a\n      b'), 'a\n  b');
-});
-
 /* ------------------------------------------------------------ rendering */
 
 test('renderCard never overflows, at any terminal width', () => {
@@ -177,9 +171,12 @@ test('renderCard never overflows, at any terminal width', () => {
   }
 });
 
-test('renderCard keeps the art until the terminal is too narrow for it', () => {
-  assert.ok(plain(renderCard(fixture, 80)).includes('▄'), 'art shown when it fits');
-  assert.ok(!plain(renderCard(fixture, 10)).includes('▄'), 'art dropped when it cannot');
+test('renderCard drops the frame on a very narrow terminal', () => {
+  const wide = plain(renderCard(fixture, 80));
+  assert.match(wide, /^╭/, 'a framed card on a normal terminal');
+  const tiny = plain(renderCard(fixture, 14));
+  assert.doesNotMatch(tiny, /[╭│╰]/, 'too narrow to frame, so it prints plain');
+  assert.match(tiny, /Test Person/);
 });
 
 test('renderCard renders the name, title and handle', () => {
@@ -187,12 +184,6 @@ test('renderCard renders the name, title and handle', () => {
   assert.match(out, /Test Person/);
   assert.match(out, /Tester/);
   assert.match(out, /@testperson/);
-});
-
-test('renderCard stacks when the terminal is too narrow', () => {
-  const out = plain(renderCard(fixture, 40));
-  // No side-by-side gutter: every art line starts on its own row.
-  assert.ok(out.split('\n')[0].includes('▄'));
 });
 
 test('renderLinks lists every url', () => {
@@ -226,7 +217,6 @@ test('tokenize passes multi-byte characters through intact', () => {
 test('mergeProfile fills gaps from the defaults', () => {
   const merged = mergeProfile(defaultProfile, { name: 'Only A Name' });
   assert.equal(merged.name, 'Only A Name');
-  assert.ok(merged.ascii.length > 0);
   assert.ok(merged.intro.length > 0);
   assert.ok(merged.menu.length > 0);
 });
@@ -243,7 +233,6 @@ test('mergeProfile keeps an omitted exit menu entry', () => {
 
 test('the shipped profile is well formed', () => {
   assert.ok(profile.name && profile.title, 'name and title are required');
-  assert.ok(profile.ascii.length > 20, 'ascii art is missing');
   assert.ok(profile.intro.length > 0, 'intro is empty');
   assert.ok(profile.menu.length > 0, 'menu is empty');
   assert.ok(profile.exit?.label, 'exit item is missing');
@@ -258,12 +247,9 @@ test('the shipped profile is well formed', () => {
   }
 });
 
-test('the default profile is a usable fallback', () => {
+test('both profiles render without a portrait', () => {
   for (const p of [defaultProfile, profile]) {
-    assert.ok(p.ascii.length > 20, 'art is missing');
-    const art = dedent(p.ascii).split('\n');
-    assert.ok(art.length >= 3, `art should have several lines, got ${art.length}`);
-    for (const line of art) assert.ok(line.trim().length > 0, 'art has a blank line');
-    assert.equal(plain(renderCard(p, 80)).length > 0, true);
+    assert.equal(p.ascii, undefined, 'the card no longer takes art');
+    assert.match(plain(renderCard(p, 80)), /╭/);
   }
 });

@@ -15,20 +15,6 @@ export const defaultProfile = {
   location: 'Where you are',
   pronouns: null,
 
-  ascii: `
-     ▄▄▄▄▄▄
-   ▄█████████▄▄
-  ██████████████
-  ██  ▀▀▀▀▀▀  ██
-  ██████████████
-    ▀███████▀▀
- ▄▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄▄
-█████████████████████
- ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-  `
-    .replace(/^\n/, '')
-    .replace(/\s+$/, ''),
-
   intro: [
     'This card has not been filled in yet.',
     '',

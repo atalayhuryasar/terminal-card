@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Typographic card: gradient frame, gradient name, and a fading accent rule
+  under the header.
+
+### Removed
+
+- The photo-to-ASCII converter (`scripts/ascii-art.js` and `scripts/lib/`).
+  Photo renders were hard to make legible at card sizes, and the card reads
+  better without a portrait.
+- The `ascii` profile key. Draw art into `intro` instead — it is plain text
+  and gets the same markup.
+
+### Changed
+
+- The card no longer reserves a column for a portrait, which means it no
+  longer has to drop art that is too wide or stack a second layout.
+- Below about 20 columns the frame is dropped and the words are printed plain.
+
 ## [1.2.0]
 
 ### Added

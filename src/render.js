@@ -9,7 +9,6 @@ import {
   rgb,
   visibleWidth,
   padEnd,
-  padStart,
   colorEnabled,
 } from './ansi.js';
 import { profile } from './profile.js';
@@ -60,6 +59,10 @@ export function renderSegments(segments) {
           return bold(rgb(...ACCENT)(text));
         case 'name':
           return bold(rgb(...ACCENT)(text));
+        case 'gradient':
+          return bold(gradientText(text));
+        case 'handle':
+          return fgBlue(text);
         case 'role':
           return bold(rgb(...ACCENT_END)(text));
         case 'location':
@@ -181,108 +184,116 @@ export function wrapMarkup(lines, width) {
   return wrapSegments(lines.map(parseMarkup), width).map(renderSegments);
 }
 
-/** Remove the shared leading indentation from an ASCII block. */
-export const dedent = (art) => {
-  const lines = art.split('\n');
-  const indent = Math.min(
-    ...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)[0].length),
-  );
-  return lines.map((l) => l.slice(indent)).join('\n');
-};
-
 /**
- * Draw a rounded box around segment rows.
- * Rows may be unstyled strings or `{ text, style }` segments.
- */
-export function box(rows) {
-  const b = { tl: '╭', tr: '╮', bl: '╰', br: '╯', h: '─', v: '│' };
-  const styled = rows.map((row) => (typeof row === 'string' ? [{ text: row }] : row));
-  const rendered = styled.map((row) => renderSegments(row));
-  const inner = Math.max(0, ...rendered.map(visibleWidth)) + 1;
-  const horizontal = dim(b.h.repeat(inner));
-  const body = rendered.map((l) => `${dim(b.v)} ${padEnd(l, inner - 1)} ${dim(b.v)}`);
-  return [
-    dim(b.tl) + horizontal + dim(b.tr),
-    ...body,
-    dim(b.bl) + horizontal + dim(b.br),
-  ].join('\n');
-}
-
-/**
- * Terminal width to lay out for.
- * An interactive terminal knows its own width; when piped (CI, files) we fall
- * back to COLUMNS so the layout stays predictable and testable.
- */
-export function terminalWidth(stream = process.stdout) {
-  return stream.columns || Number(process.env.COLUMNS) || 80;
-}
-
-/**
- * The static part: ASCII portrait on the left, bio card on the right.
+ * The card: a typographic panel, no portrait.
  *
- * Layout is decided by available width:
- *   wide   — portrait beside the card
- *   narrow — portrait above the card
- *   tiny   — no portrait, no box, just wrapped text
+ * Colour does the work an image would otherwise do — a gradient frame, a
+ * gradient name, an accent rule, dimmed metadata — so the card reads well at
+ * any width and nothing has to be drawn by hand.
+ *
+ *   ╭───────────── gradient frame ─────────────╮
+ *   │   Atalay Hüryaşar      (gradient, bold)  │
+ *   │   @handle                              │
+ *   │   Role  ·  Location                    │
+ *   │   ─────── fading rule ───────          │
+ *   │   body text, wrapped to the frame      │
+ *   ╰─────────────────────────────────────────╯
  */
 export function renderCard(p = profile, columns = terminalWidth()) {
-  const art = dedent(p.ascii).split('\n');
-  const artWidth = Math.max(...art.map(visibleWidth));
-  const GUTTER = 2;
-  const CHROME = 4; // "│ " on both sides of the box
-  const MAX_BOX = 62;
-  const READABLE = 34; // narrowest card that still looks like a card
+  const SIDE = 2; // spaces between the edge and the text
+  const PAD = 2; // extra breathing room inside that
+  const MAX = 70; // widest the card ever gets
+  // two edges, the two corners, and the padding on both sides
+  const GUTTER = 2 + 2 * (1 + SIDE + PAD);
 
-  const colorize = (line, i) =>
-    rgb(...mix(ACCENT, ACCENT_END, art.length === 1 ? 0 : i / (art.length - 1)))(
-      line,
-    );
+  // Never wider than the terminal, however narrow that is.
+  const outer = Math.min(MAX, columns);
+  const text = outer - GUTTER; // width available for content
 
-  const head = [
-    [
-      { text: p.name, style: 'name' },
-      p.pronouns ? { text: ` (${p.pronouns})`, style: 'dim' } : null,
-      p.handle ? { text: '  ' + p.handle, style: 'dim' } : null,
-    ].filter(Boolean),
-    [
-      { text: p.title, style: 'role' },
-      p.location ? { text: '  ·  ' + p.location, style: 'location' } : null,
-    ].filter(Boolean),
-    [],
-  ];
-
-  // Tiny terminal: drop the decoration entirely rather than overflow.
-  if (columns - CHROME < 16) {
-    return wrapSegments(head.concat(p.intro.map(parseMarkup)), columns)
+  // Too narrow to frame anything: print the words and leave it at that.
+  if (text < 12) {
+    return wrapSegments(
+      [[{ text: p.name, style: 'name' }], [{ text: p.title, style: 'role' }], []]
+        .concat(p.intro.map(parseMarkup)),
+      columns,
+    )
       .map(renderSegments)
       .join('\n');
   }
 
-  // A portrait wider than the terminal would overflow, so drop it entirely.
-  const showArt = artWidth <= columns;
+  const head = [
+    [
+      { text: p.name, style: 'gradient' },
+      p.pronouns ? { text: ` (${p.pronouns})`, style: 'dim' } : null,
+    ].filter(Boolean),
+    p.handle ? [{ text: p.handle, style: 'handle' }] : [],
+    [
+      { text: p.title, style: 'role' },
+      p.location ? { text: `  ·  ${p.location}`, style: 'dim' } : null,
+    ].filter(Boolean),
+    [],
+  ];
 
-  const sideBySide = showArt && columns - artWidth - GUTTER - CHROME >= READABLE;
-  const boxWidth = sideBySide
-    ? Math.min(MAX_BOX, columns - artWidth - GUTTER)
-    : columns;
+  const body = wrapSegments(head.concat(p.intro.map(parseMarkup)), text);
+  body.splice(headerEnd(body), 0, { type: 'rule', width: text });
 
-  const body = wrapSegments(head.concat(p.intro.map(parseMarkup)), boxWidth - CHROME);
-  const bio = box(body);
-  const bioLines = bio.split('\n');
+  const edge = rgb(...ACCENT)('│');
+  const inset = ' '.repeat(1 + SIDE + PAD);
+  const wrap = (content) => `${edge}${inset}${content}${' '.repeat(PAD + SIDE)} ${edge}`;
 
-  if (!sideBySide) {
-    return [...(showArt ? art.map((line, i) => colorize(line, i)) : []), '', bio].join('\n');
-  }
+  const rows = body.map((row) =>
+    row.type === 'rule'
+      ? wrap(rule(row.width))
+      : wrap(padEnd(renderSegments(row), text)),
+  );
 
-  const out = [];
-  for (let i = 0; i < Math.max(art.length, bioLines.length); i++) {
-    const left =
-      i < art.length ? padStart(colorize(art[i], i), artWidth) + ' '.repeat(GUTTER) : '';
-    out.push(left + (bioLines[i] ?? ''));
-  }
-  return out.join('\n').replace(/\n+$/, '');
+  const span = outer - 2; // dashes between the two corners
+  return [
+    gradientEdge(span, '╭', '╮', ACCENT, ACCENT_END),
+    ...rows,
+    gradientEdge(span, '╰', '╯', ACCENT_END, ACCENT),
+  ].join('\n');
 }
 
+/** Index just after the blank row that closes the header block. */
+function headerEnd(rows) {
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].length === 0) return i + 1;
+  }
+  return rows.length;
+}
+
+/** Every character in its own colour, stepping across the gradient. */
+function gradientText(value, from = ACCENT, to = ACCENT_END) {
+  const chars = [...value];
+  if (chars.length === 1) return rgb(...from)(chars[0]);
+  return chars
+    .map((char, i) => rgb(...mix(from, to, i / (chars.length - 1)))(char))
+    .join('');
+}
+
+/** A run of dashes fading from one colour into another. */
+function gradientEdge(width, left, right, from, to) {
+  let out = rgb(...from)(left);
+  for (let i = 0; i < width; i++) {
+    const t = width === 1 ? 0 : i / (width - 1);
+    out += rgb(...mix(from, to, t))('─');
+  }
+  return out + rgb(...to)(right);
+}
+
+/** The separator under the header: accent, fading out towards the right. */
+function rule(width) {
+  const steps = Math.min(width, 16);
+  let out = '';
+  for (let i = 0; i < steps; i++) {
+    const t = steps === 1 ? 0 : i / (steps - 1);
+    // Fade towards black as it goes, so the rule stays quiet.
+    const color = mix(mix(ACCENT, ACCENT_END, t), [0, 0, 0], 1 - t * 0.5);
+    out += rgb(...color)('─');
+  }
+  return out + ' '.repeat(Math.max(0, width - steps));
+}
 /** Short, colourised link list (used by --links and non-TTY runs). */
 export function renderLinks(p = profile) {
   const rows = p.menu

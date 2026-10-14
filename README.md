@@ -17,30 +17,25 @@
 npx huryasar
 ```
 
-=-..:::==+-=+==#*=-:+@*###+=  ╭───────────────────────────────────────────────╮
---:---:.:*-===%@#+-:=*#***==  │ Atalay Hüryaşar  @atalayhuryasar               │
--::+=:-..++-+-%@**-:==*++#==  │ Creative Technologist  ·  Somewhere in Asia    │
-=:-:::--.+===-****--==**=#*=  │                                                │
--:-.=:--:++#+=*=++=-==##+++=  │ Hello, this is Atalay Hüryaşar, a Creative     │
-:--:=:.::=*==*#*+==-==#*+==-  │ Technologist.                                  │
--.::.:::.=+=-:..:=*=++#*+=--  │                                                │
-::::-----+-       .+**#+==--  │ I build small, sharp tools for people who live │
----++---=.         .*#*=----  │ in a terminal and a menu bar at the same time: │
-=-:=#=:-.           :%#-----  │ Homebrew taps, macOS utilities, GitHub         │
--.:----.             =#=::--  │ Actions, and the occasional Go program.        │
--.--.:-              :#-=--:  │                                                │
-::-:.:                =##-:-  │ I believe the best software installs with one  │
-::-*.:                -=+-:-  │ line and then gets out of the way. I am        │
-::--..                :-:::.  │ currently shipping open source macOS tools and │
-..:...                -::::.  │ writing about the parts that bite.             │
-......       ...      :::...  │                                                │
-:::::.      ..:..     --.:-.  │ Say hi, I do not bite.                         │
-::-:-.    .:--==-:    +--=-.  ╰───────────────────────────────────────────────╯
-::=:..    .-=+**+=:   #+-=-.  
-.:-...   .:=*####+=.  -:=+*.  
-:::...   :=*#@@@%#+:  -:=+=.  
- --::..   -+#@@@@@%#= .-.--.  
-=--:::. .=*@@@@@@@@+::-:::..  
+╭────────────────────────────────────────────────────────────────────╮
+│     Atalay Hüryaşar                                                │
+│     @atalayhuryasar                                                │
+│     Creative Technologist  ·  Somewhere in Asia                    │
+│                                                                    │
+│     ────────────────                                               │
+│     Hello, this is Atalay Hüryaşar, a Creative Technologist.       │
+│                                                                    │
+│     I build small, sharp tools for people who live in a            │
+│     terminal and a menu bar at the same time: Homebrew taps,       │
+│     macOS utilities, GitHub Actions, and the occasional Go         │
+│     program.                                                       │
+│                                                                    │
+│     I believe the best software installs with one line and         │
+│     then gets out of the way. I am currently shipping open         │
+│     source macOS tools and writing about the parts that bite.      │
+│                                                                    │
+│     Say hi, I do not bite.                                         │
+╰────────────────────────────────────────────────────────────────────╯
 
 ```
 
@@ -117,7 +112,7 @@ only write the parts that are actually yours.
 **4 — Publish**
 
 ```bash
-npm test        # 67 tests, no dependencies
+npm test        # 30 tests, no dependencies
 npm publish
 ```
 
@@ -139,7 +134,6 @@ Everything the card prints lives in `me.config.js`.
 | `handle`   | `string`   | no       | `@you`, printed next to the name           |
 | `location` | `string`   | no       | Shown next to the title                    |
 | `pronouns` | `string`   | no       | e.g. `"he/him"`                            |
-| `ascii`    | `string`   | no       | Any monospace art — the default is a bust  |
 | `intro`    | `string[]` | no       | Paragraphs; `''` for a blank line          |
 | `menu`     | `object[]` | no       | `{ icon, label, hint, url }`               |
 | `exit`     | `object`   | no       | The last row of the menu                   |
@@ -162,92 +156,11 @@ intro: [
 ]
 ```
 
-### Changing the art
-
-`ascii` is just a string. Draw it by hand, or let the converter do it —
-see **[From a photo](#from-a-photo)** below. It is dedented automatically, so
-you never have to align it with your code.
-
-<br>
-
-## From a photo
-
-Do not draw your portrait in a text editor. `scripts/ascii-art.js` turns a
-photo — or your GitHub avatar — into art you can paste straight into
-`me.config.js`.
-
-```bash
-npm run ascii -- --github atalayhuryasar --width 26 --rows 22 --update-config
-```
-
-That one command fetches the avatar, converts it, and rewrites the `ascii:`
-block in your config. To go straight into the card, use `--update-config`:
-
-```
-▒░▒░░░░░░▒▒░▒▒▒▒▒░░▒▒▒▒▒▒░▒
-░░░░▒░░░░▒░▒▒▓▒▒░░▒▒▒▒▒▒▒▓
-░░░░░░░░░▒░▒░▒▒▒░░▒▒▒▒▒▒▒░
-░░░░░░░░░▒▒▒▒▒▒▒▒░▒▒▒▒▒▒▒░
-...
-```
-
-| Flag              | Effect                                            |
-| ----------------- | ------------------------------------------------- |
-| `--github <user>` | Use that GitHub user's avatar instead of a file    |
-| `--width, -w`     | Width in characters (default 40)                  |
-| `--rows`          | Crop so the art is exactly this many lines tall   |
-| `--zoom`          | Crop in by a factor — portraits read better zoomed |
-| `--focus`         | `top`, `center` or `bottom` (default `center`)    |
-| `--mode`          | `shade`, `mono` or `blocks` (default `shade`)     |
-| `--charset`       | `classic`, `simple`, `minimal`, `binary`, `shade`  |
-| `--invert`        | For light terminal backgrounds                    |
-| `--no-levels`     | Skip the automatic contrast stretch               |
-| `--no-color`      | Plain characters instead of ANSI colour           |
-| `--update-config` | Write the result into `me.config.js`              |
-| `--out <file>`    | Write to a file instead of stdout                  |
-
-**Getting a good portrait takes three things.**
-
-*A crop that frames the head* (`--rows` sets the height, `--zoom 1.3 --focus
-top` tightens onto the face). Without this a square avatar becomes a 40-line
-column and the face is a smudge in the middle.
-
-*Contrast.* Most avatars and photos are flat — the background and the face land
-on nearly the same grey, and no character ramp can show detail that is not in
-the range. Every render stretches the tones to the full range first, the same
-auto-levels a photo editor does. This one feature is the difference between
-noise and a face. Turn it off with `--no-levels` if you disagree.
-
-*A ramp with enough levels.* `classic` has ten and holds real detail. `shade`
-has four and reads cleanly when the card colours the art.
-
-```bash
-# clean and colourful — good for the card
-npm run ascii -- --github you --width 26 --rows 22 --zoom 1.2 --focus top
-
-# more detail, plain text
-npm run ascii -- me.jpg --width 60 --charset classic
-
-# full 24-bit colour, two pixels per character
-npm run ascii -- me.jpg --width 50 --mode blocks
-```
-
-**How it reads your files.** PNG is decoded in JavaScript — colour types 0,
-2, 3, 4 and 6, bit depths 1 to 16, using nothing but Node's `zlib`. JPEG,
-HEIC, WebP and GIF are handed to a tool already on your machine: `sips` on
-macOS, ImageMagick or ffmpeg elsewhere. Nothing is installed, and nothing
-leaves your computer unless you use `--github`.
-
-<br>
-
 ## It fits your terminal
 
-The card measures your terminal and re-wraps itself to fit. Three layouts, no
-overflow, no horizontal scrollbar.
-
-| Wide | Narrow | Tiny |
-| ---- | ------ | ---- |
-| Portrait beside the card | Portrait above the card | No portrait, no box, just text |
+The card measures your terminal and re-wraps itself to fit. Past 70 columns it
+stops growing and centres in the space it is given; below about 20 it drops
+the frame entirely and just prints the words.
 
 <img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/card-narrow.svg" alt="The same card at 52 columns" width="438">
 
@@ -293,16 +206,12 @@ bin/card.js           CLI entry point and flag parsing
 me.config.js          your card — the one file you edit
 src/profile.js        merges your config over the defaults
 src/default.js        fallback profile, also the template reference
-src/render.js         markup, word wrapping, responsive layout
+src/render.js         markup, word wrapping, the card layout
 src/menu.js           arrow-key menu and key decoding
 src/ansi.js           colour and display-width helpers
 src/open.js           cross-platform "open this link"
-scripts/ascii-art.js  photo or avatar to ASCII art
-scripts/lib/png.js    PNG decoder and encoder, on Node's zlib
-scripts/lib/image.js  reads PNG here, transcodes the rest via the system
-scripts/lib/ascii.js  resampling, cropping, rendering
 scripts/demo.js       renders docs/*.svg from the real output
-test/                 67 tests, no test framework dependency
+test/                 30 tests, no test framework dependency
 ```
 
 Small enough to read in one sitting, dependency-free enough to trust, tested
@@ -315,7 +224,7 @@ enough to fork.
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test                  # 67 tests
+npm test                  # 30 tests
 node test/width-check.js  # overflow guard
 npm run demo              # regenerate docs/*.svg after changing the card
 git diff --exit-code docs # fails if the demo images are stale
