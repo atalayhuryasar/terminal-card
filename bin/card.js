@@ -9,6 +9,12 @@ const pkg = JSON.parse(
   readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
 );
 
+// `npx huryasar | head` closes the pipe early; that is normal, not a crash.
+process.stdout.on('error', (error) => {
+  if (error.code === 'EPIPE') process.exit(0);
+  throw error;
+});
+
 const args = process.argv.slice(2);
 const has = (...flags) => flags.some((f) => args.includes(f));
 

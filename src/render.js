@@ -185,6 +185,15 @@ export function wrapMarkup(lines, width) {
 }
 
 /**
+ * Terminal width to lay out for.
+ * An interactive terminal knows its own width; when piped (CI, files) we fall
+ * back to COLUMNS so the layout stays predictable and testable.
+ */
+export function terminalWidth(stream = process.stdout) {
+  return stream.columns || Number(process.env.COLUMNS) || 80;
+}
+
+/**
  * The card: a typographic panel, no portrait.
  *
  * Colour does the work an image would otherwise do — a gradient frame, a

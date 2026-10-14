@@ -112,7 +112,7 @@ only write the parts that are actually yours.
 **4 — Publish**
 
 ```bash
-npm test        # 30 tests, no dependencies
+npm test        # 31 tests, no dependencies
 npm publish
 ```
 
@@ -211,7 +211,7 @@ src/menu.js           arrow-key menu and key decoding
 src/ansi.js           colour and display-width helpers
 src/open.js           cross-platform "open this link"
 scripts/demo.js       renders docs/*.svg from the real output
-test/                 30 tests, no test framework dependency
+test/                 31 tests, no test framework dependency
 ```
 
 Small enough to read in one sitting, dependency-free enough to trust, tested
@@ -224,7 +224,7 @@ enough to fork.
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test                  # 30 tests
+npm test                  # 31 tests
 node test/width-check.js  # overflow guard
 npm run demo              # regenerate docs/*.svg after changing the card
 git diff --exit-code docs # fails if the demo images are stale

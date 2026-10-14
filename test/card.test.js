@@ -30,6 +30,25 @@ const fixture = {
   exit: { icon: '👋', label: 'Bye.' },
 };
 
+/* ------------------------------------------------------------------- cli */
+
+test('the CLI survives a closed pipe', async () => {
+  // `npx huryasar | head` must not throw EPIPE.
+  const { execFile } = await import('node:child_process');
+  const { fileURLToPath } = await import('node:url');
+  const bin = fileURLToPath(new URL('../bin/card.js', import.meta.url));
+
+  await new Promise((resolve, reject) => {
+    const child = execFile(
+      process.execPath,
+      [bin, '--no-menu'],
+      { env: { ...process.env, COLUMNS: '80' } },
+      (error, stdout) => (error ? reject(error) : resolve(stdout)),
+    );
+    child.stdout.destroy(); // close the read end immediately
+  });
+});
+
 /* ------------------------------------------------------------------ ansi */
 
 test('visibleWidth ignores ANSI codes', () => {
