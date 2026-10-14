@@ -12,8 +12,12 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
 const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
 
-// Colour must be on before ansi.js is evaluated.
+// Colour must be on, and in truecolor, before ansi.js is evaluated. Both are
+// pinned so the output does not depend on the terminal this runs in.
 process.env.FORCE_COLOR = '3';
+process.env.COLORTERM = 'truecolor';
+delete process.env.NO_COLOR;
+delete process.env.TERM;
 const { renderCard } = await import('../src/render.js');
 const { profile } = await import('../src/profile.js');
 
