@@ -17,25 +17,26 @@
 This is a live card printed by [`npx huryasar`](https://www.npmjs.com/package/huryasar):
 
 ```
-               ▄▄▄▄▄▄  ╭────────────────────────────────────────────────────╮
-         ▄█████████▄▄  │ Atalay Hüryaşar  @atalayhuryasar                    │
-       ██████████████  │ Creative Technologist  ·  Somewhere in Asia         │
-       ██  ▀▀▀▀▀▀  ██  │                                                     │
-       ██████████████  │ Hello, this is Atalay Hüryaşar, a Creative          │
-           ▀███████▀▀  │ Technologist.                                       │
-    ▄▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄▄  │                                                     │
-█████████████████████  │ I build small, sharp tools for people who live in a │
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  │ terminal and a menu bar at the same time: Homebrew  │
-│ taps, macOS utilities, GitHub Actions, and the      │
-│ occasional Go program.                              │
-│                                                     │
-│ I believe the best software installs with one line  │
-│ and then gets out of the way. I am currently        │
-│ shipping open source macOS tools and writing about  │
-│ the parts that bite.                                │
-│                                                     │
-│ Say hi, I do not bite.                              │
-╰────────────────────────────────────────────────────╯
+
+               ▄▄▄▄▄▄  ╭──────────────────────────────────────────────────────╮
+         ▄█████████▄▄  │ Atalay Hüryaşar  @atalayhuryasar                      │
+       ██████████████  │ Creative Technologist  ·  Somewhere in Asia           │
+       ██  ▀▀▀▀▀▀  ██  │                                                       │
+       ██████████████  │ Hello, this is Atalay Hüryaşar, a Creative            │
+           ▀███████▀▀  │ Technologist.                                         │
+    ▄▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄▄  │                                                       │
+█████████████████████  │ I build small, sharp tools for people who live in a   │
+  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  │ terminal and a menu bar at the same time: Homebrew    │
+│ taps, macOS utilities, GitHub Actions, and the        │
+│ occasional Go program.                                │
+│                                                       │
+│ I believe the best software installs with one line    │
+│ and then gets out of the way. I am currently shipping │
+│ open source macOS tools and writing about the parts   │
+│ that bite.                                            │
+│                                                       │
+│ Say hi, I do not bite.                                │
+╰──────────────────────────────────────────────────────╯
 
   ? Do you want to learn more about me?
   ❯ 🐙  My GitHub profile  (GitHub)

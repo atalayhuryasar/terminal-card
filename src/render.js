@@ -77,9 +77,6 @@ export function renderSegments(segments) {
     .join('');
 }
 
-/** Render one source line, markup included. */
-export const renderLine = (line) => renderSegments(parseMarkup(line));
-
 /**
  * Split a too-long word into chunks that each fit in `width` columns,
  * preserving the styling of every fragment.

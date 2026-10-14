@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { profile } from '../src/profile.js';
 import { renderCard, renderLinks } from '../src/render.js';
 import { browse } from '../src/menu.js';
-import { bold, dim, fgGreen } from '../src/ansi.js';
+import { bold, dim } from '../src/ansi.js';
 
 const pkg = JSON.parse(
   readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
@@ -12,10 +11,6 @@ const pkg = JSON.parse(
 
 const args = process.argv.slice(2);
 const has = (...flags) => flags.some((f) => args.includes(f));
-const valueOf = (flag) => {
-  const i = args.indexOf(flag);
-  return i !== -1 ? args[i + 1] : undefined;
-};
 
 const HELP = `
   ${bold(pkg.name)} ${dim('v' + pkg.version)} — ${dim('terminal business card')}
@@ -23,8 +18,8 @@ const HELP = `
   ${dim('Usage')}   npx ${pkg.name} [options]
 
   ${dim('Options')}
-    --links        Print the link list only, no interactive menu
-    --no-menu      Print the card and exit (alias of --links without links)
+    --links        Card plus link list, no interactive menu
+    --no-menu      Card only
     --json         Print the profile as JSON
     --help, -h     Show this help
     --version, -v  Show the version
@@ -50,15 +45,13 @@ if (has('--json')) {
 }
 
 const header = () => {
-  const now = new Date();
-  const clock = now.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+  const when = new Date().toLocaleString('en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'medium',
   });
-  return `${dim(`Last login: ${now.toDateString()} on ttys000`)}\n${dim(
-    '..................................................',
-  )}  ${dim('at')} ${dim(clock)}\n`;
+  return `${dim('$')} npx ${bold(pkg.name)} ${dim(`v${pkg.version}`)}  ${dim(
+    '·',
+  )}  ${dim(when)}\n`;
 };
 
 if (has('--links')) {
@@ -79,10 +72,6 @@ const items = [...profile.menu, profile.exit];
 await browse({
   title: 'Do you want to learn more about me?',
   items,
-  onSelect: (item) => {
-    if (item.label === profile.exit.label) return;
-    process.stdout.write(dim(`\n  ${fgGreen('✦')} Opening ${item.url}\n`));
-  },
 });
 
 process.stdout.write(dim('  Bye.\n\n'));

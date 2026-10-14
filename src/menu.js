@@ -86,9 +86,7 @@ export async function browse({ title, items, onSelect }) {
           process.stdout.write(`  ${item.label} → ${item.url}\n`);
         } else {
           open(item.url);
-          process.stdout.write(
-            `  Opened ${item.label} — ${item.url}\n  (tip: ⌥/Alt-click the link above to copy it)\n`,
-          );
+          process.stdout.write(`  Opened ${item.label} — ${item.url}\n`);
         }
         onSelect?.(item);
       } else {

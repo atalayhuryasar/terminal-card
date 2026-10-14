@@ -23,22 +23,15 @@ const wrap = (open, close) => (s) =>
 
 export const bold = wrap(1, 22);
 export const dim = wrap(2, 22);
-export const italic = wrap(3, 23);
 export const underline = wrap(4, 24);
-export const inverse = wrap(7, 27);
 
-const fg = (n) => (s) => (colorEnabled ? `\u001b[38;5;${n}m${s}\u001b[39m` : String(s));
-const bg = (n) => (s) => (colorEnabled ? `\u001b[48;5;${n}m${s}\u001b[49m` : String(s));
+const fg = (n) => (s) =>
+  colorEnabled ? `\u001b[38;5;${n}m${s}\u001b[39m` : String(s);
 
-export const fgRed = fg(1);
 export const fgGreen = fg(2);
-export const fgYellow = fg(3);
 export const fgBlue = fg(4);
 export const fgMagenta = fg(5);
 export const fgCyan = fg(6);
-export const fgWhite = fg(7);
-export const bgMagenta = bg(5);
-export const bgCyan = bg(6);
 
 /** Foreground colour from an RGB triple, downsampled when truecolor is absent. */
 export const rgb = (r, g, b) => (s) => {
