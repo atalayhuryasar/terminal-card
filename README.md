@@ -9,7 +9,7 @@
 [![node](https://img.shields.io/badge/node-%3E%3D18-5b8def)](https://nodejs.org)
 [![ci](https://github.com/atalayhuryasar/terminal-card/actions/workflows/ci.yml/badge.svg)](https://github.com/atalayhuryasar/terminal-card/actions/workflows/ci.yml)
 [![deps](https://img.shields.io/badge/dependencies-0-28a745)](package.json)
-[![size](https://img.shields.io/badge/published-12%20kB-5b8def)](https://www.npmjs.com/package/huryasar)
+[![size](https://img.shields.io/badge/published-14%20kB-5b8def)](https://www.npmjs.com/package/huryasar)
 
 <img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/card.svg" alt="The card printed by npx huryasar" width="696">
 
@@ -17,44 +17,32 @@
 npx huryasar
 ```
 
-</div>
+▒░▒░░░░░▒▒░▒▒▒▒▒░░▒▒▒▒▒▒░▒  ╭────────────────────────────────────────────────╮
+░░░░▒░░░░▒░▒▒▓▒▒░░▒▒▒▒▒▒▒▓  │ Atalay Hüryaşar  @atalayhuryasar                │
+░░░░░░░░░▒░▒░▒▒▒░░▒▒▒▒▒▒▒░  │ Creative Technologist  ·  Somewhere in Asia     │
+░░░░░░░░░▒▒▒▒▒▒▒▒░▒▒▒▒▒▒▒░  │                                                 │
+░░░░░░░░░▒░▒▒▒▒▒▒░▒▒▒▒░░░░  │ Hello, this is Atalay Hüryaşar, a Creative      │
+░░░░░░░░░▒▒░░░░░▒▒▒▒▒▒░░░░  │ Technologist.                                   │
+▒░░░▒▒░░▒░░░░░░░░░▒▒▒░░░░░  │                                                 │
+░░░░░▒░░░░░░░░░░░░▒▒░░░░░░  │ I build small, sharp tools for people who live  │
+░░░░░░░░░░░░░░░░░░░▒░░░░░░  │ in a terminal and a menu bar at the same time:  │
+░░░░░░░░░░░░░░░░░░░▒▒▒░░░░  │ Homebrew taps, macOS utilities, GitHub Actions, │
+░░░░▒░░░░░░░░░░░░░░░▒▒░░▒░  │ and the occasional Go program.                  │
+▒░░░░░░░░░░░░░░░░░░░░░░░░░  │                                                 │
+▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ I believe the best software installs with one   │
+▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ line and then gets out of the way. I am         │
+▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ currently shipping open source macOS tools and  │
+▓░░░░░░░░░░▒▒▒▒▒░░░▒▒░░░░░  │ writing about the parts that bite.              │
+▒░░░░░░░░░▒▒▒▒▒▒▒░░░░▒▒░░░  │                                                 │
+▓▒░░░░░░░░▒▓▓▓▓▓▒░░░░░░░░░  │ Say hi, I do not bite.                          │
+▓▒▒░░░░░░▒▒▓▓▓▓▓▓▒░░░░░░░░  ╰────────────────────────────────────────────────╯
+▓▓▒▒░░▒░░▒▒▓▓▓▒▒▓▒▒▒░░░░░░  
+▓▓▓▒▒░▒░░░░░▒▒░▒▒▒▒▒░░░░░░  
+▓▓▓▓▓▒▒░░░░░▒▒░░░▒▒▒░▒░░░░  
 
----
-
-A business card that lives in a terminal. No app, no download, no QR code to
-scan with a camera you left at home. One command prints who you are and what
-you do, and gives you a menu of links you can open with the arrow keys.
-
-It ships as a package on npm, and this repository is the template behind it.
-**Fork it, edit one file, publish your own.**
-
-<br>
-
-## Contents
-
-- [Why](#why)
-- [Try it](#try-it)
-- [Make it yours](#make-it-yours)
-- [Configuration](#configuration)
-- [It fits your terminal](#it-fits-your-terminal)
-- [Keyboard](#keyboard)
-- [How it behaves](#how-it-behaves)
-- [Project layout](#project-layout)
-- [Contributing](#contributing)
-
-<br>
-
-## Why
-
-A URL in a chat message is a dead end. A QR code at a conference table is a
-dead end. What works everywhere — in a terminal, over SSH, in a CI log, on a
-plane — is a command somebody can actually run.
-
-```bash
-npx huryasar
 ```
 
-No install, no config, no account. It is 12 kB of JavaScript with **zero
+No install, no config, no account. It is 14 kB of JavaScript with **zero
 dependencies**, and it makes **no network requests** — the only thing that ever
 opens is the link you pick.
 
@@ -127,7 +115,7 @@ only write the parts that are actually yours.
 **4 — Publish**
 
 ```bash
-npm test        # 32 tests, no dependencies
+npm test        # 59 tests, no dependencies
 npm publish
 ```
 
@@ -174,18 +162,68 @@ intro: [
 
 ### Changing the art
 
-`ascii` is just a string. Any monospace drawing works — block characters,
-`░▒▓█▄▀`, emoji, even a word:
+`ascii` is just a string. Draw it by hand, or let the converter do it —
+see **[From a photo](#from-a-photo)** below. It is dedented automatically, so
+you never have to align it with your code.
 
-```js
-ascii: `
-  ╭──────────────╮
-  │  HELLO       │
-  ╰──────────────╯
-`,
+<br>
+
+## From a photo
+
+Do not draw your portrait in a text editor. `scripts/ascii-art.js` turns a
+photo — or your GitHub avatar — into art you can paste straight into
+`me.config.js`.
+
+```bash
+npm run ascii -- --github atalayhuryasar --width 26 --rows 22 --update-config
 ```
 
-It is dedented automatically, so you never have to align it with your code.
+That one command fetches the avatar, converts it, and rewrites the `ascii:`
+block in your config. To go straight into the card, use `--update-config`:
+
+```
+▒░▒░░░░░░▒▒░▒▒▒▒▒░░▒▒▒▒▒▒░▒
+░░░░▒░░░░▒░▒▒▓▒▒░░▒▒▒▒▒▒▒▓
+░░░░░░░░░▒░▒░▒▒▒░░▒▒▒▒▒▒▒░
+░░░░░░░░░▒▒▒▒▒▒▒▒░▒▒▒▒▒▒▒░
+...
+```
+
+| Flag              | Effect                                            |
+| ----------------- | ------------------------------------------------- |
+| `--github <user>` | Use that GitHub user's avatar instead of a file    |
+| `--width, -w`     | Width in characters (default 40)                  |
+| `--rows`          | Crop so the art is exactly this many lines tall   |
+| `--zoom`          | Crop in by a factor — portraits read better zoomed |
+| `--focus`         | `top`, `center` or `bottom` (default `center`)    |
+| `--mode`          | `shade`, `mono` or `blocks` (default `shade`)     |
+| `--charset`       | `classic`, `simple`, `minimal`, `binary`, `shade`  |
+| `--invert`        | For light terminal backgrounds                    |
+| `--no-color`      | Plain characters instead of ANSI colour           |
+| `--update-config` | Write the result into `me.config.js`              |
+| `--out <file>`    | Write to a file instead of stdout                  |
+
+**Getting a good portrait takes three things:** a square-ish crop (`--rows`),
+a bit of zoom on the head (`--zoom 1.2 --focus top`), and a ramp with enough
+levels. `shade` is four characters and reads well when the art is coloured by
+the card; `classic` has ten levels and holds more detail.
+
+```bash
+# clean and colourful — good for the card
+npm run ascii -- --github you --width 26 --rows 22 --zoom 1.2 --focus top
+
+# more detail, plain text
+npm run ascii -- me.jpg --width 60 --charset classic
+
+# full 24-bit colour, two pixels per character
+npm run ascii -- me.jpg --width 50 --mode blocks
+```
+
+**How it reads your files.** PNG is decoded in JavaScript — colour types 0,
+2, 3, 4 and 6, bit depths 1 to 16, using nothing but Node's `zlib`. JPEG,
+HEIC, WebP and GIF are handed to a tool already on your machine: `sips` on
+macOS, ImageMagick or ffmpeg elsewhere. Nothing is installed, and nothing
+leaves your computer unless you use `--github`.
 
 <br>
 
@@ -246,8 +284,12 @@ src/render.js         markup, word wrapping, responsive layout
 src/menu.js           arrow-key menu and key decoding
 src/ansi.js           colour and display-width helpers
 src/open.js           cross-platform "open this link"
+scripts/ascii-art.js  photo or avatar to ASCII art
+scripts/lib/png.js    PNG decoder and encoder, on Node's zlib
+scripts/lib/image.js  reads PNG here, transcodes the rest via the system
+scripts/lib/ascii.js  resampling, cropping, rendering
 scripts/demo.js       renders docs/*.svg from the real output
-test/                 32 tests, no test framework dependency
+test/                 59 tests, no test framework dependency
 ```
 
 Small enough to read in one sitting, dependency-free enough to trust, tested
@@ -260,7 +302,7 @@ enough to fork.
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test                  # 32 tests
+npm test                  # 59 tests
 node test/width-check.js  # overflow guard
 npm run demo              # regenerate docs/*.svg after changing the card
 git diff --exit-code docs # fails if the demo images are stale

@@ -41,6 +41,7 @@
     "start": "node bin/card.js",
     "test": "node --test test/*.test.js",
     "demo": "node scripts/demo.js",
+    "ascii": "node scripts/ascii-art.js",
     "prepublishOnly": "npm test"
   },
   "publishConfig": {

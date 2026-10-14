@@ -21,6 +21,28 @@ build step. Node 18 or newer is required.
 your changes immediately. To check the fallback rendering too, temporarily
 point `src/profile.js` at `defaultProfile`.
 
+## Working on the photo converter
+
+The ASCII art generator lives in `scripts/` and is not part of the published
+package. It is where a new image format or a new character ramp would go:
+
+```
+scripts/ascii-art.js   the command line
+scripts/lib/png.js     PNG decode/encode on Node's zlib
+scripts/lib/image.js   format detection and transcoding
+scripts/lib/ascii.js   resampling, cropping, ramps, rendering
+```
+
+Try it against a public avatar while you work:
+
+```bash
+npm run ascii -- --github atalayhuryasar --width 40 --rows 30
+```
+
+Two rules keep it honest: it must keep working with **zero npm dependencies**,
+and it must never send a local file anywhere. `--github` is the only path that
+makes a network request, and it only asks GitHub for a public avatar.
+
 ## Pull requests
 
 1. Open an issue first for anything larger than a small fix, so we can agree

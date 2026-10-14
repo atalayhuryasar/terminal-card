@@ -260,8 +260,10 @@ test('the shipped profile is well formed', () => {
 
 test('the default profile is a usable fallback', () => {
   for (const p of [defaultProfile, profile]) {
-    assert.ok(p.ascii.length > 20);
-    assert.equal(dedent(p.ascii).split('\n').length, 9);
+    assert.ok(p.ascii.length > 20, 'art is missing');
+    const art = dedent(p.ascii).split('\n');
+    assert.ok(art.length >= 3, `art should have several lines, got ${art.length}`);
+    for (const line of art) assert.ok(line.trim().length > 0, 'art has a blank line');
     assert.equal(plain(renderCard(p, 80)).length > 0, true);
   }
 });
