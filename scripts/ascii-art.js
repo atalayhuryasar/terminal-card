@@ -43,6 +43,7 @@ const HELP = `
     --mode <mode>       shade | mono | blocks   (default shade)
     --charset <name>    ${Object.keys(CHARSETS).join(' | ')}
     --invert            For light terminal backgrounds
+    --no-levels         Skip the automatic contrast stretch
     --zoom <n>          Crop in by a factor (portraits read better zoomed)
     --focus <where>     top | center | bottom (default center)
     --rows <n>          Crop so the art is exactly n lines tall
@@ -121,6 +122,7 @@ const art = asciiArt(image, {
   charset,
   invert: flag('invert'),
   color: !flag('no-color'),
+  levels: !flag('no-levels'),
   zoom: Number(option('zoom', 1)),
   rows: Number(option('rows', 0)) || undefined,
   focus: option('focus', 'center'),

@@ -17,28 +17,30 @@
 npx huryasar
 ```
 
-▒░▒░░░░░▒▒░▒▒▒▒▒░░▒▒▒▒▒▒░▒  ╭────────────────────────────────────────────────╮
-░░░░▒░░░░▒░▒▒▓▒▒░░▒▒▒▒▒▒▒▓  │ Atalay Hüryaşar  @atalayhuryasar                │
-░░░░░░░░░▒░▒░▒▒▒░░▒▒▒▒▒▒▒░  │ Creative Technologist  ·  Somewhere in Asia     │
-░░░░░░░░░▒▒▒▒▒▒▒▒░▒▒▒▒▒▒▒░  │                                                 │
-░░░░░░░░░▒░▒▒▒▒▒▒░▒▒▒▒░░░░  │ Hello, this is Atalay Hüryaşar, a Creative      │
-░░░░░░░░░▒▒░░░░░▒▒▒▒▒▒░░░░  │ Technologist.                                   │
-▒░░░▒▒░░▒░░░░░░░░░▒▒▒░░░░░  │                                                 │
-░░░░░▒░░░░░░░░░░░░▒▒░░░░░░  │ I build small, sharp tools for people who live  │
-░░░░░░░░░░░░░░░░░░░▒░░░░░░  │ in a terminal and a menu bar at the same time:  │
-░░░░░░░░░░░░░░░░░░░▒▒▒░░░░  │ Homebrew taps, macOS utilities, GitHub Actions, │
-░░░░▒░░░░░░░░░░░░░░░▒▒░░▒░  │ and the occasional Go program.                  │
-▒░░░░░░░░░░░░░░░░░░░░░░░░░  │                                                 │
-▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ I believe the best software installs with one   │
-▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ line and then gets out of the way. I am         │
-▒░░░░░░░░░░░░░░░░░░░░░░░░░  │ currently shipping open source macOS tools and  │
-▓░░░░░░░░░░▒▒▒▒▒░░░▒▒░░░░░  │ writing about the parts that bite.              │
-▒░░░░░░░░░▒▒▒▒▒▒▒░░░░▒▒░░░  │                                                 │
-▓▒░░░░░░░░▒▓▓▓▓▓▒░░░░░░░░░  │ Say hi, I do not bite.                          │
-▓▒▒░░░░░░▒▒▓▓▓▓▓▓▒░░░░░░░░  ╰────────────────────────────────────────────────╯
-▓▓▒▒░░▒░░▒▒▓▓▓▒▒▓▒▒▒░░░░░░  
-▓▓▓▒▒░▒░░░░░▒▒░▒▒▒▒▒░░░░░░  
-▓▓▓▓▓▒▒░░░░░▒▒░░░▒▒▒░▒░░░░  
+=-..:::==+-=+==#*=-:+@*###+=  ╭───────────────────────────────────────────────╮
+--:---:.:*-===%@#+-:=*#***==  │ Atalay Hüryaşar  @atalayhuryasar               │
+-::+=:-..++-+-%@**-:==*++#==  │ Creative Technologist  ·  Somewhere in Asia    │
+=:-:::--.+===-****--==**=#*=  │                                                │
+-:-.=:--:++#+=*=++=-==##+++=  │ Hello, this is Atalay Hüryaşar, a Creative     │
+:--:=:.::=*==*#*+==-==#*+==-  │ Technologist.                                  │
+-.::.:::.=+=-:..:=*=++#*+=--  │                                                │
+::::-----+-       .+**#+==--  │ I build small, sharp tools for people who live │
+---++---=.         .*#*=----  │ in a terminal and a menu bar at the same time: │
+=-:=#=:-.           :%#-----  │ Homebrew taps, macOS utilities, GitHub         │
+-.:----.             =#=::--  │ Actions, and the occasional Go program.        │
+-.--.:-              :#-=--:  │                                                │
+::-:.:                =##-:-  │ I believe the best software installs with one  │
+::-*.:                -=+-:-  │ line and then gets out of the way. I am        │
+::--..                :-:::.  │ currently shipping open source macOS tools and │
+..:...                -::::.  │ writing about the parts that bite.             │
+......       ...      :::...  │                                                │
+:::::.      ..:..     --.:-.  │ Say hi, I do not bite.                         │
+::-:-.    .:--==-:    +--=-.  ╰───────────────────────────────────────────────╯
+::=:..    .-=+**+=:   #+-=-.  
+.:-...   .:=*####+=.  -:=+*.  
+:::...   :=*#@@@%#+:  -:=+=.  
+ --::..   -+#@@@@@%#= .-.--.  
+=--:::. .=*@@@@@@@@+::-:::..  
 
 ```
 
@@ -115,7 +117,7 @@ only write the parts that are actually yours.
 **4 — Publish**
 
 ```bash
-npm test        # 59 tests, no dependencies
+npm test        # 67 tests, no dependencies
 npm publish
 ```
 
@@ -199,14 +201,25 @@ block in your config. To go straight into the card, use `--update-config`:
 | `--mode`          | `shade`, `mono` or `blocks` (default `shade`)     |
 | `--charset`       | `classic`, `simple`, `minimal`, `binary`, `shade`  |
 | `--invert`        | For light terminal backgrounds                    |
+| `--no-levels`     | Skip the automatic contrast stretch               |
 | `--no-color`      | Plain characters instead of ANSI colour           |
 | `--update-config` | Write the result into `me.config.js`              |
 | `--out <file>`    | Write to a file instead of stdout                  |
 
-**Getting a good portrait takes three things:** a square-ish crop (`--rows`),
-a bit of zoom on the head (`--zoom 1.2 --focus top`), and a ramp with enough
-levels. `shade` is four characters and reads well when the art is coloured by
-the card; `classic` has ten levels and holds more detail.
+**Getting a good portrait takes three things.**
+
+*A crop that frames the head* (`--rows` sets the height, `--zoom 1.3 --focus
+top` tightens onto the face). Without this a square avatar becomes a 40-line
+column and the face is a smudge in the middle.
+
+*Contrast.* Most avatars and photos are flat — the background and the face land
+on nearly the same grey, and no character ramp can show detail that is not in
+the range. Every render stretches the tones to the full range first, the same
+auto-levels a photo editor does. This one feature is the difference between
+noise and a face. Turn it off with `--no-levels` if you disagree.
+
+*A ramp with enough levels.* `classic` has ten and holds real detail. `shade`
+has four and reads cleanly when the card colours the art.
 
 ```bash
 # clean and colourful — good for the card
@@ -289,7 +302,7 @@ scripts/lib/png.js    PNG decoder and encoder, on Node's zlib
 scripts/lib/image.js  reads PNG here, transcodes the rest via the system
 scripts/lib/ascii.js  resampling, cropping, rendering
 scripts/demo.js       renders docs/*.svg from the real output
-test/                 59 tests, no test framework dependency
+test/                 67 tests, no test framework dependency
 ```
 
 Small enough to read in one sitting, dependency-free enough to trust, tested
@@ -302,7 +315,7 @@ enough to fork.
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test                  # 59 tests
+npm test                  # 67 tests
 node test/width-check.js  # overflow guard
 npm run demo              # regenerate docs/*.svg after changing the card
 git diff --exit-code docs # fails if the demo images are stale

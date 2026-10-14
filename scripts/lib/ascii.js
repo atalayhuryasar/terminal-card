@@ -73,6 +73,42 @@ export function resize(image, width, height) {
   return { width, height, data: out };
 }
 
+/**
+ * Stretch an image's tones so it uses the full 0-255 range.
+ *
+ * Photos and avatars are often flat — a dim background and a dim face land on
+ * the same grey — and a ramp cannot show detail that is not in the range.
+ * Clipping a small percentage at each end and rescaling is what photo tools
+ * call auto-levels, and it is the single biggest difference between an
+ * unreadable render and a recognisable one.
+ *
+ * @param {object} image  RGBA image
+ * @param {number} clip   fraction of pixels to ignore at each end (0.02)
+ */
+export function normalize(image, clip = 0.02) {
+  if (!clip) return image; // levels explicitly disabled
+
+  const luma = luminance(image);
+  const sorted = Float64Array.from(luma).sort();
+  const at = (fraction) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.floor(fraction * sorted.length)))];
+
+  const low = at(clip);
+  const high = at(1 - clip);
+  if (high - low < 1) return image; // already flat, stretching would only add noise
+
+  const scale = 255 / (high - low);
+  const data = Buffer.from(image.data);
+  for (let i = 0; i < data.length; i += 4) {
+    for (let c = 0; c < 3; c++) {
+      data[i + c] = Math.max(0, Math.min(255, Math.round((data[i + c] - low) * scale)));
+    }
+  }
+  return { ...image, data };
+}
+
+/** Drop trailing whitespace so lines do not dangle. */
+const trimLine = (line) => line.replace(/\s+$/, '');
+
 /** Rec. 709 relative luminance, 0 (black) to 255 (white). */
 export function luminance(image) {
   const { width, height, data } = image;
@@ -96,10 +132,10 @@ export function rowsFor(columns, image, cellRatio = CELL_RATIO) {
  * @param {object} image   decoded RGBA image
  * @param {object} options columns, charset, invert, aspect
  */
-export function renderMono(image, { columns = 40, charset = 'classic', invert = false, cellRatio = CELL_RATIO } = {}) {
+export function renderMono(image, { columns = 40, charset = 'classic', invert = false, levels = true, cellRatio = CELL_RATIO } = {}) {
   const ramp = CHARSETS[charset] ?? CHARSETS.classic;
   const rows = rowsFor(columns, image, cellRatio);
-  const small = resize(image, columns, rows);
+  const small = normalize(resize(image, columns, rows), levels ? 0.02 : 0);
   const luma = luminance(small);
 
   const lines = [];
@@ -111,7 +147,7 @@ export function renderMono(image, { columns = 40, charset = 'classic', invert = 
       const t = invert ? 1 - value : value;
       line += ramp[Math.min(ramp.length - 1, Math.floor(t * ramp.length))];
     }
-    lines.push(line);
+    lines.push(trimLine(line));
   }
   return lines;
 }
@@ -123,11 +159,11 @@ export function renderMono(image, { columns = 40, charset = 'classic', invert = 
  * @param {object} image   decoded RGBA image
  * @param {object} options columns, colour, invert, aspect
  */
-export function renderBlocks(image, { columns = 40, color = true, invert = false, cellRatio = CELL_RATIO } = {}) {
+export function renderBlocks(image, { columns = 40, color = true, invert = false, levels = true, cellRatio = CELL_RATIO } = {}) {
   // Two pixel rows per character row, so the art has twice the vertical
   // detail of the mono renderer at the same apparent height.
   const lines = rowsFor(columns, image, cellRatio) * 2;
-  const small = resize(image, columns, lines * 2);
+  const small = normalize(resize(image, columns, lines * 2), levels ? 0.02 : 0);
   const ramp = CHARSETS.shade;
 
   const pixel = (x, y) => {
@@ -229,14 +265,15 @@ export function asciiArt(image, options = {}) {
     zoom = 1,
     focus = 'center',
     rows,
+    levels = true,
   } = options;
 
   const cropped = fitRows(crop(image, { zoom, focus }), rows, columns, focus);
 
   const lines =
     mode === 'blocks'
-      ? renderBlocks(cropped, { columns, color, invert })
-      : renderMono(cropped, { columns, charset, invert });
+      ? renderBlocks(cropped, { columns, color, invert, levels })
+      : renderMono(cropped, { columns, charset, invert, levels });
 
   return { lines, columns, rows: lines.length, mode };
 }

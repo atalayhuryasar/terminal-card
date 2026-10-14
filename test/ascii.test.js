@@ -8,6 +8,7 @@ import {
   crop,
   fitRows,
   luminance,
+  normalize,
   renderBlocks,
   renderMono,
   resize,
@@ -180,8 +181,19 @@ test('renderMono inverts on request', () => {
   const normal = renderMono(image, { columns: 8 })[0];
   const flipped = renderMono(image, { columns: 8, invert: true })[0];
   const ramp = CHARSETS.classic;
-  assert.notEqual(normal, flipped);
-  assert.equal(ramp[0], flipped[0]);
+
+  // A white image is the top of the ramp normally, and the bottom inverted.
+  assert.equal(normal, ramp.at(-1).repeat(8));
+  assert.equal(flipped, '', 'inverted white becomes a blank line, then trimmed');
+});
+
+test('renderMono inverts a mid-tone the other way round', () => {
+  const image = solid(8, 8, [128, 128, 128, 255]);
+  const ramp = CHARSETS.classic;
+  const normal = renderMono(image, { columns: 8, levels: false })[0];
+  const flipped = renderMono(image, { columns: 8, levels: false, invert: true })[0];
+  assert.equal(normal[0], ramp[Math.floor((128 / 255) * ramp.length)]);
+  assert.equal(flipped[0], ramp[ramp.length - 1 - Math.floor((128 / 255) * ramp.length)]);
 });
 
 test('renderMono honours the aspect ratio option', () => {
@@ -229,6 +241,74 @@ test('asciiArt respects an explicit row count', () => {
 test('asciiArt survives an unknown charset without crashing', () => {
   const art = asciiArt(gradient(40, 40), { columns: 10, charset: 'nope' });
   assert.equal(art.lines.length > 0, true);
+});
+
+/* ------------------------------------------------------------ normalize */
+
+test('normalize stretches a flat image to the full tonal range', () => {
+  // Everything sits between 100 and 110 — no ramp can show that.
+  const flat = solid(16, 16, [100, 100, 100, 255]);
+  flat.data.fill(110, 0, 16 * 4);
+
+  const out = normalize(flat);
+  const tones = [...out.data].filter((_, i) => i % 4 !== 3);
+  assert.ok(Math.min(...tones) <= 1, `dark end not stretched: ${Math.min(...tones)}`);
+  assert.ok(Math.max(...tones) >= 254, `bright end not stretched: ${Math.max(...tones)}`);
+});
+
+test('normalize leaves a uniform image alone', () => {
+  const flat = solid(8, 8, [128, 128, 128, 255]);
+  assert.equal(normalize(flat), flat, 'no spread means no stretch, just noise');
+});
+
+test('normalize does not touch the alpha channel', () => {
+  const image = solid(8, 8, [100, 100, 100, 77]);
+  for (let i = 0; i < image.data.length; i += 4) {
+    image.data[i] = image.data[i + 1] = image.data[i + 2] = 140;
+  }
+  const out = normalize(image);
+  for (let i = 3; i < out.data.length; i += 4) assert.equal(out.data[i], 77);
+});
+
+test('normalize with no clipping is the identity', () => {
+  const image = gradient(12, 12);
+  assert.equal(normalize(image, 0), image);
+});
+
+test('normalize widens the contrast of a flat photo', () => {
+  const image = gradient(40, 40);
+  for (let i = 0; i < image.data.length; i += 4) {
+    image.data[i] = 120 + image.data[i] * 0.12;
+  }
+  const out = normalize(image);
+  assert.ok(Math.max(...out.data.filter((_, i) => i % 4 !== 3)) >= 254);
+});
+
+test('auto-levels make a low-contrast render readable', () => {
+  // A grey-on-grey portrait: without stretching, nearly every cell matches.
+  const image = solid(32, 32, [90, 90, 90, 255]);
+  for (let y = 0; y < 32; y++) {
+    for (let x = 0; x < 32; x++) {
+      if (x > 8 && x < 24 && y > 6 && y < 26) {
+        const i = (y * 32 + x) * 4;
+        image.data[i] = image.data[i + 1] = image.data[i + 2] = 96;
+      }
+    }
+  }
+
+  const spread = (levels) =>
+    new Set(asciiArt(image, { columns: 16, levels }).lines.join('')).size;
+
+  assert.ok(
+    spread(true) > spread(false),
+    'stretching should use more of the ramp',
+  );
+});
+
+test('rendered lines never carry trailing whitespace', () => {
+  for (const line of asciiArt(gradient(60, 60), { columns: 20 }).lines) {
+    assert.equal(line, line.replace(/\s+$/, ''));
+  }
 });
 
 /* ---------------------------------------------------------- config edit */
