@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="438" height="651" viewBox="0 0 438 651" role="img" aria-label="npx huryasar terminal card">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2c38"/>
+      <stop offset="1" stop-color="#22242e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="438" height="651" rx="12" fill="#15161d"/>
+  <rect width="438" height="34" rx="12" fill="url(#chrome)"/>
+  <rect y="22" width="438" height="12" fill="url(#chrome)"/>
+  <line x1="0" y1="34" x2="438" y2="34" stroke="#31333f"/>
+
+  <circle cx="18" cy="17" r="5" fill="#ff5f57"/>
+  <circle cx="36" cy="17" r="5" fill="#febc2e"/>
+  <circle cx="54" cy="17" r="5" fill="#28c840"/>
+
+  <text x="219" y="21" fill="#8b8ea3" font-size="11"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">terminal</text>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+    <text x="20" y="64" xml:space="preserve"><tspan fill="#7bd88f">$</tspan><tspan fill="#d8dae4"> npx huryasar</tspan></text>
+    <text x="20" y="93" xml:space="preserve"><tspan fill="rgb(255, 95, 175)">     ▄▄▄▄▄▄</tspan></text>
+    <text x="20" y="112" xml:space="preserve"><tspan fill="rgb(238, 99, 185)">   ▄█████████▄▄</tspan></text>
+    <text x="20" y="131" xml:space="preserve"><tspan fill="rgb(221, 104, 195)">  ██████████████</tspan></text>
+    <text x="20" y="150" xml:space="preserve"><tspan fill="rgb(204, 108, 205)">  ██  ▀▀▀▀▀▀  ██</tspan></text>
+    <text x="20" y="169" xml:space="preserve"><tspan fill="rgb(188, 113, 215)">  ██████████████</tspan></text>
+    <text x="20" y="188" xml:space="preserve"><tspan fill="rgb(171, 117, 225)">    ▀███████▀▀</tspan></text>
+    <text x="20" y="207" xml:space="preserve"><tspan fill="rgb(154, 121, 235)"> ▄▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄▄</tspan></text>
+    <text x="20" y="226" xml:space="preserve"><tspan fill="rgb(137, 126, 245)">█████████████████████</tspan></text>
+    <text x="20" y="245" xml:space="preserve"><tspan fill="rgb(120, 130, 255)"> ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀</tspan></text>
+    <text x="20" y="264" xml:space="preserve"></text>
+    <text x="20" y="283" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">╭</tspan><tspan fill="#d8dae4" opacity="0.55">────────────────────────────────────────────────</tspan><tspan fill="#d8dae4" opacity="0.55">╮</tspan></text>
+    <text x="20" y="302" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Atalay</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Hüryaşar</tspan><tspan fill="#d8dae4">  </tspan><tspan fill="#d8dae4" opacity="0.55">@atalayhuryasar</tspan><tspan fill="#d8dae4">                </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="321" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(120, 130, 255)" font-weight="700">Creative</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(120, 130, 255)" font-weight="700">Technologist</tspan><tspan fill="#d8dae4">  </tspan><tspan fill="#6cb6ff">·</tspan><tspan fill="#d8dae4">  </tspan><tspan fill="#6cb6ff">Somewhere</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#6cb6ff">in</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#6cb6ff">Asia</tspan><tspan fill="#d8dae4">     </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="340" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4">                                                 </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="359" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> Hello, this is </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Atalay</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Hüryaşar</tspan><tspan fill="#d8dae4">, a </tspan><tspan fill="#f78fd6" font-weight="700">Creative</tspan><tspan fill="#d8dae4">      </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="378" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#f78fd6" font-weight="700">Technologist</tspan><tspan fill="#d8dae4">.                                   </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="397" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4">                                                 </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="416" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> I build small, sharp tools for people who live  </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="435" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> in a terminal and a menu bar at the same time:  </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="454" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Homebrew</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">taps</tspan><tspan fill="#d8dae4">, </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">macOS</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">utilities</tspan><tspan fill="#d8dae4">, </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">GitHub</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Actions</tspan><tspan fill="#d8dae4">, </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="473" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> and the occasional </tspan><tspan fill="rgb(255, 95, 175)" font-weight="700">Go</tspan><tspan fill="#d8dae4"> program.                  </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="492" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4">                                                 </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="511" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> I believe the best software installs with one   </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="530" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> line and then gets out of the way. I am         </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="549" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> currently shipping </tspan><tspan fill="#5fd7f2" text-decoration="underline">open</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#5fd7f2" text-decoration="underline">source</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#5fd7f2" text-decoration="underline">macOS</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#5fd7f2" text-decoration="underline">tools</tspan><tspan fill="#d8dae4"> and  </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="568" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> writing about the parts that bite.              </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="587" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4">                                                 </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="606" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">│</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">Say</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">hi,</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">I</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">do</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">not</tspan><tspan fill="#d8dae4"> </tspan><tspan fill="#d8dae4" opacity="0.55">bite.</tspan><tspan fill="#d8dae4">                          </tspan><tspan fill="#d8dae4" opacity="0.55">│</tspan></text>
+    <text x="20" y="625" xml:space="preserve"><tspan fill="#d8dae4" opacity="0.55">╰</tspan><tspan fill="#d8dae4" opacity="0.55">────────────────────────────────────────────────</tspan><tspan fill="#d8dae4" opacity="0.55">╯</tspan></text>
+  </g>
+</svg>

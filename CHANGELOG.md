@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0]
+
+### Added
+
+- `scripts/demo.js` renders the card to `docs/*.svg` for the README, straight
+  from the real output. Regenerate with `npm run demo`.
+- A test fails if the demo images drift out of date, so the README can never
+  show something the CLI does not print.
+- Discussions enabled on the repository.
+
+### Changed
+
+- Rewrote the README around what a visitor needs: the card first, then why it
+  exists, then how to make their own.
+- Replaced the fake `Last login: … on ttys000` banner with the real command
+  and timestamp.
+- Removed dead code and tightened `--help`.
+
 ## [1.1.0]
 
 ### Added
@@ -41,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Respect for `NO_COLOR`, `FORCE_COLOR`, `TERM=dumb` and `ATALAY_NO_OPEN`.
 - Test suite covering markup parsing, wrapping, layout width and key decoding.
 
-[Unreleased]: https://github.com/atalayhuryasar/terminal-card/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/atalayhuryasar/terminal-card/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/atalayhuryasar/terminal-card/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/atalayhuryasar/terminal-card/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/atalayhuryasar/terminal-card/releases/tag/v1.0.0

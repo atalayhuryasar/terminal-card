@@ -2,42 +2,71 @@
 
 # terminal-card
 
-**Your terminal business card. One command, zero install.**
+### Your terminal business card. One command, zero install.
 
 [![npm](https://img.shields.io/npm/v/huryasar?label=npm&color=cb3837&logo=npm)](https://www.npmjs.com/package/huryasar)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
+[![license](https://img.shields.io/badge/license-MIT-5b8def)](LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D18-5b8def)](https://nodejs.org)
 [![ci](https://github.com/atalayhuryasar/terminal-card/actions/workflows/ci.yml/badge.svg)](https://github.com/atalayhuryasar/terminal-card/actions/workflows/ci.yml)
-[![zero deps](https://img.shields.io/badge/dependencies-0-success.svg)](package.json)
+[![deps](https://img.shields.io/badge/dependencies-0-28a745)](package.json)
+[![size](https://img.shields.io/badge/published-12%20kB-5b8def)](https://www.npmjs.com/package/huryasar)
+
+<img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/card.svg" alt="The card printed by npx huryasar" width="696">
+
+```bash
+npx huryasar
+```
 
 </div>
 
 ---
 
-This is a live card printed by [`npx huryasar`](https://www.npmjs.com/package/huryasar):
+A business card that lives in a terminal. No app, no download, no QR code to
+scan with a camera you left at home. One command prints who you are and what
+you do, and gives you a menu of links you can open with the arrow keys.
 
+It ships as a package on npm, and this repository is the template behind it.
+**Fork it, edit one file, publish your own.**
+
+<br>
+
+## Contents
+
+- [Why](#why)
+- [Try it](#try-it)
+- [Make it yours](#make-it-yours)
+- [Configuration](#configuration)
+- [It fits your terminal](#it-fits-your-terminal)
+- [Keyboard](#keyboard)
+- [How it behaves](#how-it-behaves)
+- [Project layout](#project-layout)
+- [Contributing](#contributing)
+
+<br>
+
+## Why
+
+A URL in a chat message is a dead end. A QR code at a conference table is a
+dead end. What works everywhere — in a terminal, over SSH, in a CI log, on a
+plane — is a command somebody can actually run.
+
+```bash
+npx huryasar
 ```
 
-               ▄▄▄▄▄▄  ╭──────────────────────────────────────────────────────╮
-         ▄█████████▄▄  │ Atalay Hüryaşar  @atalayhuryasar                      │
-       ██████████████  │ Creative Technologist  ·  Somewhere in Asia           │
-       ██  ▀▀▀▀▀▀  ██  │                                                       │
-       ██████████████  │ Hello, this is Atalay Hüryaşar, a Creative            │
-           ▀███████▀▀  │ Technologist.                                         │
-    ▄▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄▄  │                                                       │
-█████████████████████  │ I build small, sharp tools for people who live in a   │
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  │ terminal and a menu bar at the same time: Homebrew    │
-│ taps, macOS utilities, GitHub Actions, and the        │
-│ occasional Go program.                                │
-│                                                       │
-│ I believe the best software installs with one line    │
-│ and then gets out of the way. I am currently shipping │
-│ open source macOS tools and writing about the parts   │
-│ that bite.                                            │
-│                                                       │
-│ Say hi, I do not bite.                                │
-╰──────────────────────────────────────────────────────╯
+No install, no config, no account. It is 12 kB of JavaScript with **zero
+dependencies**, and it makes **no network requests** — the only thing that ever
+opens is the link you pick.
 
+<br>
+
+## Try it
+
+```bash
+npx huryasar              # the interactive card
+```
+
+```
   ? Do you want to learn more about me?
   ❯ 🐙  My GitHub profile  (GitHub)
     🧰  Tools I maintain  (GitHub)
@@ -47,42 +76,44 @@ This is a live card printed by [`npx huryasar`](https://www.npmjs.com/package/hu
     👋  Bye.
 ```
 
-**This repository is the template.** `huryasar` on npm is one published instance
-of it — fork it, edit one file, publish your own.
+| Flag              | Effect                                      |
+| ----------------- | ------------------------------------------- |
+| `--links`         | Card plus link list, no interactive menu    |
+| `--no-menu`       | Card only                                   |
+| `--json`          | The resolved profile as JSON                |
+| `--help`, `-h`    | Help                                        |
+| `--version`, `-v` | Version                                     |
 
----
-
-## Quick start
-
-```bash
-npx huryasar
-```
-
-Nothing to install, nothing to uninstall. If you want it permanently:
+Install it if you would rather have it on your `PATH`:
 
 ```bash
 npm install -g huryasar
 huryasar
 ```
 
+<br>
+
 ## Make it yours
 
-**1. Fork this repository**
+**1 — Fork this repository**
 
-**2. Edit [`me.config.js`](me.config.js)** — this is the only file you need.
-A minimal config is two lines:
+**2 — Edit [`me.config.js`](me.config.js).** That is the only file you need to
+touch. A complete card is this short:
 
 ```js
 export const profile = {
   name: 'Ada Lovelace',
+  title: 'Mathematician',
   menu: [
     { icon: '🐙', label: 'My GitHub', hint: 'GitHub', url: 'https://github.com/adalovelace' },
   ],
 };
 ```
 
-**3. Rename the package** in `package.json` — the `name`, the `bin` key, and
-the URLs in `repository` / `bugs` / `homepage`:
+Anything you leave out falls back to [`src/default.js`](src/default.js), so you
+only write the parts that are actually yours.
+
+**3 — Rename the package** in `package.json`:
 
 ```diff
 -  "name": "huryasar",
@@ -93,45 +124,46 @@ the URLs in `repository` / `bugs` / `homepage`:
    },
 ```
 
-**4. Publish**
+**4 — Publish**
 
 ```bash
-npm test              # make sure it still renders
+npm test        # 32 tests, no dependencies
 npm publish
 ```
 
-That's it. Your friends now run `npx ada`.
+Your friends now run `npx ada`.
 
-> Package names on npm cannot be renamed after publishing. Pick something
-> available before you ship. You can check with `npm view <name>`.
+> npm package names cannot be changed after publishing. Check yours is free
+> first with `npm view <name>` — an empty result means it is available.
+
+<br>
 
 ## Configuration
 
-Everything the card prints lives in `me.config.js`. Anything you leave out
-falls back to [`src/default.js`](src/default.js).
+Everything the card prints lives in `me.config.js`.
 
-| Key        | Type       | Required | Notes                                          |
-| ---------- | ---------- | -------- | ---------------------------------------------- |
-| `name`     | `string`   | yes      | Printed in bold at the top                     |
-| `title`    | `string`   | yes      | Your role, shown under the name                |
-| `handle`   | `string`   | no       | `@you`, printed next to the name               |
-| `location` | `string`   | no       | Shown next to the title                        |
-| `pronouns` | `string`   | no       | e.g. `"he/him"`                                |
-| `ascii`    | `string`   | no       | Any monospace art — the default is a bust      |
-| `intro`    | `string[]` | no       | Paragraphs, `''` for a blank line              |
-| `menu`     | `object[]` | no       | `{ icon, label, hint, url }`                   |
-| `exit`     | `object`   | no       | The last row of the menu                       |
+| Key        | Type       | Required | Notes                                      |
+| ---------- | ---------- | -------- | ------------------------------------------ |
+| `name`     | `string`   | yes      | Printed in bold at the top                 |
+| `title`    | `string`   | yes      | Your role, shown under the name            |
+| `handle`   | `string`   | no       | `@you`, printed next to the name           |
+| `location` | `string`   | no       | Shown next to the title                    |
+| `pronouns` | `string`   | no       | e.g. `"he/him"`                            |
+| `ascii`    | `string`   | no       | Any monospace art — the default is a bust  |
+| `intro`    | `string[]` | no       | Paragraphs; `''` for a blank line          |
+| `menu`     | `object[]` | no       | `{ icon, label, hint, url }`               |
+| `exit`     | `object`   | no       | The last row of the menu                   |
 
 ### Inline markup
 
-Works in `intro` lines:
+Works anywhere in `intro`:
 
-| Syntax        | Result                        |
-| ------------- | ----------------------------- |
-| `*text*`      | bold, accent colour           |
-| `` `text` ``  | bold, highlight colour        |
-| `_text_`      | dim                           |
-| `{label\|url}`| link — opens in the menu view |
+| Syntax          | Result                                    |
+| --------------- | ----------------------------------------- |
+| `*text*`        | Bold, accent colour                       |
+| `` `text` ``    | Bold, highlight colour                    |
+| `_text_`        | Dim                                       |
+| `{label\|url}`  | Link — opens from the menu                |
 
 ```js
 intro: [
@@ -153,66 +185,94 @@ ascii: `
 `,
 ```
 
-It is dedented automatically, so you do not have to align it with the code.
+It is dedented automatically, so you never have to align it with your code.
 
-## CLI flags
+<br>
 
-| Flag              | Effect                                      |
-| ----------------- | ------------------------------------------- |
-| `--links`         | Card + link list, no interactive menu       |
-| `--no-menu`       | Just the card                               |
-| `--json`          | The resolved profile as JSON                |
-| `--help`, `-h`    | Help                                        |
-| `--version`, `-v` | Version                                     |
+## It fits your terminal
+
+The card measures your terminal and re-wraps itself to fit. Three layouts, no
+overflow, no horizontal scrollbar.
+
+| Wide | Narrow | Tiny |
+| ---- | ------ | ---- |
+| Portrait beside the card | Portrait above the card | No portrait, no box, just text |
+
+<img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/card-narrow.svg" alt="The same card at 52 columns" width="438">
+
+Words that cannot fit — a long URL, a long handle — are broken rather than
+allowed to overflow. The test suite checks every width from 6 to 200 columns
+against three profiles, including a deliberately hostile one.
+
+<br>
 
 ## Keyboard
 
-| Key                 | Action                    |
-| ------------------- | ------------------------- |
-| `↑` `↓` / `j` `k`   | Move                      |
-| `1`–`9`             | Jump to an entry          |
-| `enter`             | Open in your browser      |
-| `g` / `G`           | First / last entry        |
-| `esc`, `q`          | Quit                      |
+| Key                 | Action               |
+| ------------------- | -------------------- |
+| `↑` `↓` or `j` `k`  | Move                 |
+| `1`–`9`             | Jump to an entry     |
+| `enter`             | Open in your browser |
+| `g` / `G`           | First / last entry   |
+| `esc`, `q`          | Quit                 |
+
+<br>
 
 ## How it behaves
 
-- **Adapts to your terminal.** The card re-wraps to the current width. Wide
-  terminals get the portrait beside the card, narrow ones stack it on top, and
-  very narrow ones drop the decoration rather than overflow.
-- **Emoji are measured correctly.** `🐙 ✉️ ⭐` count as two columns, so the
-  menu stays aligned.
-- **Pipes cleanly.** When stdout is not a terminal the colours are dropped and
-  the interactive menu is skipped automatically.
-- **Respects your environment.** `NO_COLOR`, `FORCE_COLOR`, `TERM=dumb`.
-- **Makes no network requests.** Zero dependencies. The only thing that ever
-  opens is the link you pick.
-- Set `ATALAY_NO_OPEN=1` to print the URL instead of opening a browser.
+**Nothing is hidden.**
+
+| | |
+| --- | --- |
+| **Dependencies** | None. Nothing else is installed. |
+| **Network** | None. The card never calls home. |
+| **Piped output** | Colours are dropped and the menu is skipped automatically. |
+| **Environment** | Honours `NO_COLOR`, `FORCE_COLOR`, `TERM=dumb` and `COLUMNS`. |
+| **Printing without opening** | `ATALAY_NO_OPEN=1` prints the URL instead of launching a browser. |
+
+> Do **not** run unreviewed config files. `open()` hands the selected URL to
+> your platform's default handler — only run configs you trust.
+
+<br>
 
 ## Project layout
 
 ```
-bin/card.js        CLI entry point, flag parsing
-src/profile.js     merges me.config.js over the defaults
-me.config.js       your card — the file you edit
-src/default.js     fallback profile, also the template reference
-src/render.js      markup parsing, wrapping, layout
-src/menu.js        arrow-key menu and key decoding
-src/ansi.js        colour and display-width helpers
-src/open.js        cross-platform "open this link"
-test/card.test.js  node:test suite, no dependencies
-test/width-check.js  overflow guard, also used by CI
+bin/card.js           CLI entry point and flag parsing
+me.config.js          your card — the one file you edit
+src/profile.js        merges your config over the defaults
+src/default.js        fallback profile, also the template reference
+src/render.js         markup, word wrapping, responsive layout
+src/menu.js           arrow-key menu and key decoding
+src/ansi.js           colour and display-width helpers
+src/open.js           cross-platform "open this link"
+scripts/demo.js       renders docs/*.svg from the real output
+test/                 32 tests, no test framework dependency
 ```
+
+Small enough to read in one sitting, dependency-free enough to trust, tested
+enough to fork.
+
+<br>
 
 ## Contributing
 
-Issues and pull requests are welcome — see
-[CONTRIBUTING.md](CONTRIBUTING.md). Run the checks before opening a PR:
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test              # 29 tests
-node test/width-check.js   # no line overflows at any terminal width
+npm test                  # 32 tests
+node test/width-check.js  # overflow guard
+npm run demo              # regenerate docs/*.svg after changing the card
+git diff --exit-code docs # fails if the demo images are stale
 ```
+
+The demo images in this README are generated from the real output, and a test
+fails if they drift out of date.
+
+Security issues: see [SECURITY.md](SECURITY.md). Code of conduct:
+[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+<br>
 
 ## License
 

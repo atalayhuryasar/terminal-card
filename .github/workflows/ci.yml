@@ -32,6 +32,15 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Demo images are current
+        run: |
+          node scripts/demo.js
+          if ! git diff --quiet -- docs; then
+            echo "docs/*.svg is stale — run 'npm run demo' and commit"
+            git diff --stat -- docs
+            exit 1
+          fi
+
       - name: Check the published file list is complete
         run: npm pack --dry-run
 
