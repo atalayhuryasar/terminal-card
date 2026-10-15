@@ -34,6 +34,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on if the repository has never had it enabled.
+          enablement: true
 
       - name: Assemble the site
         run: |
