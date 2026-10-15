@@ -112,7 +112,7 @@ only write the parts that are actually yours.
 **4 — Publish**
 
 ```bash
-npm test        # 31 tests, no dependencies
+npm test        # 43 tests, no dependencies
 npm publish
 ```
 
@@ -122,6 +122,37 @@ Your friends now run `npx ada`.
 > first with `npm view <name>` — an empty result means it is available.
 
 <br>
+
+## The web editor
+
+<p align="center">
+  <a href="https://atalayhuryasar.github.io/terminal-card/">
+    <img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/editor.svg" alt="The web editor" width="880">
+  </a>
+</p>
+
+Fill in the form on the right and the card updates as you type. The preview is
+the **real renderer** — `src/render.js` is loaded straight from this
+repository — so what you see is what `npx` will print.
+
+Drag the width slider from 24 to 120 columns to watch it reflow, or turn
+colour off to see the plain layout.
+
+Press **Download package** and you get a zip containing a finished npm
+package: the runtime files, a `me.config.js` with your details, a generated
+`package.json`, and a README. Unzip it and the only thing left is:
+
+```bash
+npm publish
+```
+
+If you prefer code, the **me.config.js** tab edits the same file directly and
+reports syntax errors as you type.
+
+Nothing is uploaded. The config is evaluated in your own browser, the preview
+is computed on your machine, and the zip is built there too.
+
+---
 
 ## Configuration
 
@@ -210,8 +241,11 @@ src/render.js         markup, word wrapping, the card layout
 src/menu.js           arrow-key menu and key decoding
 src/ansi.js           colour and display-width helpers
 src/open.js           cross-platform "open this link"
+web/index.html       the editor
+web/app.js           preview, download, the ZIP writer
+web/config.js        reads and writes me.config.js
 scripts/demo.js       renders docs/*.svg from the real output
-test/                 31 tests, no test framework dependency
+test/                 43 tests, no test framework dependency
 ```
 
 Small enough to read in one sitting, dependency-free enough to trust, tested
@@ -224,7 +258,7 @@ enough to fork.
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
-npm test                  # 31 tests
+npm test                  # 43 tests
 node test/width-check.js  # overflow guard
 npm run demo              # regenerate docs/*.svg after changing the card
 git diff --exit-code docs # fails if the demo images are stale

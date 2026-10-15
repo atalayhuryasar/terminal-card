@@ -21,6 +21,21 @@ build step. Node 18 or newer is required.
 your changes immediately. To check the fallback rendering too, temporarily
 point `src/profile.js` at `defaultProfile`.
 
+## Working on the web editor
+
+`web/` is a static page, no build step. It imports `src/render.js` directly, so
+a change to the renderer shows up in the preview immediately.
+
+```bash
+python3 -m http.server 8000   # then open /web/
+```
+
+Two rules: the editor must never send anything anywhere, and the card it
+downloads must be a package that actually runs. The `Download package` button
+assembles the real files, so `web/config.js` (what it writes) and
+`me.config.js` (what the CLI reads) have to agree — `test/web.test.js` holds
+them to that.
+
 ## Pull requests
 
 1. Open an issue first for anything larger than a small fix, so we can agree

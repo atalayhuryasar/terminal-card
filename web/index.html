@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>terminal-card — build your terminal card</title>
+<meta name="description" content="Design your terminal business card in the browser, download a ready-to-publish npm package.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%23ff5faf'/></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="https://github.com/atalayhuryasar/terminal-card">
+    <span class="brand-mark">▮</span> terminal-card
+  </a>
+  <nav>
+    <a href="https://github.com/atalayhuryasar/terminal-card">Source</a>
+    <a href="https://www.npmjs.com/package/huryasar">Example</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ───────────────────────────────── editor ───────────────────────────────── -->
+  <section class="panel editor" aria-label="Card editor">
+    <div class="panel-head">
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" data-tab="form" role="tab">Form</button>
+        <button class="tab" data-tab="config" role="tab">me.config.js</button>
+      </div>
+      <button id="reset" class="ghost" type="button">Reset</button>
+    </div>
+
+    <div class="panel-body">
+      <!-- form -->
+      <div id="view-form" class="view">
+        <div class="field">
+          <label for="packageName">npm package name</label>
+          <div class="row">
+            <input id="packageName" spellcheck="false" placeholder="yourname">
+            <span class="suffix">npx <b id="packagePreview">yourname</b></span>
+          </div>
+          <p class="hint" id="packageHint">Lowercase, no spaces. This is what people type.</p>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" spellcheck="false">
+          </div>
+          <div class="field">
+            <label for="handle">Handle</label>
+            <input id="handle" spellcheck="false" placeholder="@you">
+          </div>
+          <div class="field">
+            <label for="title">Title</label>
+            <input id="title" spellcheck="false" placeholder="What you do">
+          </div>
+          <div class="field">
+            <label for="location">Location</label>
+            <input id="location" spellcheck="false" placeholder="Where you are">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="intro">Intro <span class="muted">— one paragraph per line, <code>*bold*</code> <code>`highlight`</code> <code>_dim_</code> <code>{label|url}</code></span></label>
+          <textarea id="intro" rows="7" spellcheck="false"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Links</label>
+          <div id="menuRows" class="menu-rows"></div>
+          <button id="addLink" class="ghost" type="button">+ Add a link</button>
+        </div>
+      </div>
+
+      <!-- raw config -->
+      <div id="view-config" class="view is-hidden">
+        <p class="hint">Edit the file that gets downloaded. It is evaluated in your browser — nothing is sent anywhere.</p>
+        <textarea id="config" class="code" spellcheck="false" aria-label="me.config.js"></textarea>
+        <p id="configError" class="error is-hidden"></p>
+      </div>
+    </div>
+
+    <div class="panel-foot">
+      <button id="download" class="primary" type="button">Download package</button>
+      <button id="copyConfig" class="ghost" type="button">Copy config</button>
+      <span id="status" class="status" role="status"></span>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────────── preview ──────────────────────────────── -->
+  <section class="panel preview" aria-label="Live preview">
+    <div class="panel-head">
+      <h2>Preview</h2>
+      <div class="controls">
+        <label class="slider">
+          width
+          <input id="width" type="range" min="24" max="120" value="80">
+          <output id="widthOut">80</output>
+        </label>
+        <button id="toggleColor" class="ghost" type="button" aria-pressed="false">Colour</button>
+      </div>
+    </div>
+
+    <div class="panel-body terminal-wrap">
+      <div class="terminal" id="terminal" tabindex="0">
+        <div class="term-chrome">
+          <span></span><span></span><span></span>
+          <em id="termTitle">npx yourname</em>
+        </div>
+        <pre id="screen"></pre>
+      </div>
+    </div>
+
+    <div class="panel-foot">
+      <code class="hint">npm publish</code>
+      <span class="muted">— the only step left after downloading.</span>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

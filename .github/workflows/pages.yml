@@ -1,0 +1,52 @@
+name: Deploy the web IDE
+
+# The editor pulls in src/ and bin/ at runtime so the preview runs the real
+# renderer and the download contains the real files. Publish all of it.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'src/**'
+      - 'bin/**'
+      - 'LICENSE'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp -R web/. _site/
+          cp -R src _site/src
+          mkdir -p _site/bin
+          cp bin/card.js _site/bin/
+          cp LICENSE _site/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

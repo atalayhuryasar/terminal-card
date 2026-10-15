@@ -72,7 +72,7 @@ export function renderSegments(segments) {
         case 'dim':
           return dim(text);
         case 'link':
-          return colorEnabled ? fgCyan(underline(text)) : text;
+          return colorEnabled() ? fgCyan(underline(text)) : text;
         default:
           return text;
       }

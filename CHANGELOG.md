@@ -9,8 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Web editor.** Design your card in the browser and download a finished npm
+  package, so the only step left is `npm publish`. The preview runs the real
+  renderer — `src/render.js` is loaded straight from the repository — and the
+  zip is built in the browser by a small ZIP writer, no dependencies. See
+  `.github/workflows/pages.yml` for the GitHub Pages deploy.
+- `parseRuns()` in `src/ansi.js`: turns a line of ANSI into styled runs. The
+  README illustrations and the web preview both use it, so they cannot show
+  something a terminal would not.
+- `docs/editor.svg`, generated like the other illustrations.
 - Typographic card: gradient frame, gradient name, and a fading accent rule
   under the header.
+
+### Changed
+
+- `colorEnabled` and `truecolor` are functions now, and `setColor()` /
+  `setTruecolor()` let a host override them — which is what lets the same code
+  render in a terminal and in a browser.
 
 ### Removed
 

@@ -16,6 +16,10 @@ export function mergeProfile(base, override = {}) {
 
 /** Load me.config.js if the project has one, otherwise fall back silently. */
 async function loadUserConfig() {
+  // In the browser there is no me.config.js — the web IDE passes its own
+  // profile straight to the renderer instead.
+  if (typeof window !== 'undefined') return {};
+
   try {
     const mod = await import('../me.config.js');
     const config = mod.profile ?? mod.default;
