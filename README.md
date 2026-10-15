@@ -126,7 +126,7 @@ Your friends now run `npx ada`.
 ## The web editor
 
 <p align="center">
-  <a href="https://atalayhuryasar.github.io/terminal-card/">
+  <a href="https://atalayhuryasar.github.io/terminal-card/web/">
     <img src="https://raw.githubusercontent.com/atalayhuryasar/terminal-card/main/docs/editor.svg" alt="The web editor" width="880">
   </a>
 </p>

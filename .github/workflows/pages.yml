@@ -40,12 +40,21 @@ jobs:
 
       - name: Assemble the site
         run: |
-          mkdir -p _site
-          cp -R web/. _site/
+          # Mirror the repository layout, so the editor's own relative imports
+          # (web/app.js -> ../src/render.js) resolve exactly as they do in a
+          # checkout.
+          mkdir -p _site/web _site/bin
+          cp -R web/. _site/web/
           cp -R src _site/src
-          mkdir -p _site/bin
           cp bin/card.js _site/bin/
           cp LICENSE _site/
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=./web/">
+          <title>terminal-card</title>
+          <p><a href="./web/">Open the terminal-card editor</a></p>
+          HTML
 
       - uses: actions/upload-pages-artifact@v3
         with:
