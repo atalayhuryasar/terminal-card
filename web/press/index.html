@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>terminal-card — press</title>
+<meta name="description" content="Design your terminal business card and download a ready-to-publish npm package.">
+<link rel="stylesheet" href="press.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23f2efe6'/><rect x='3' y='4' width='10' height='8' fill='%23191714'/></svg>">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="masthead">
+  <span class="mark">▣</span>
+  <span class="wordmark">terminal-card</span>
+  <span class="rule" aria-hidden="true"></span>
+  <nav>
+    <a href="./">interface v2</a>
+    <a href="https://github.com/atalayhuryasar/terminal-card">source</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ───────────────────────────── sheet ───────────────────────────── -->
+  <section class="sheet" aria-label="Card editor">
+    <div class="sheet-head">
+      <span class="tab is-on" data-tab="form">Details</span>
+      <span class="tab" data-tab="config">me.config.js</span>
+      <button id="reset" type="button">reset</button>
+    </div>
+
+    <div class="sheet-body">
+      <form id="view-form" autocomplete="off" novalidate>
+        <label class="row">
+          <span class="key">npm package</span>
+          <input id="packageName" spellcheck="false" placeholder="yourname">
+          <span class="note" id="packageHint"></span>
+        </label>
+
+        <div class="pair">
+          <label class="row"><span class="key">name</span>
+            <input id="name" spellcheck="false"></label>
+          <label class="row"><span class="key">handle</span>
+            <input id="handle" spellcheck="false" placeholder="@you"></label>
+        </div>
+
+        <div class="pair">
+          <label class="row"><span class="key">title</span>
+            <input id="title" spellcheck="false" placeholder="what you do"></label>
+          <label class="row"><span class="key">location</span>
+            <input id="location" spellcheck="false" placeholder="where you are"></label>
+        </div>
+
+        <label class="row">
+          <span class="key">introduction</span>
+          <textarea id="intro" rows="8" spellcheck="false"></textarea>
+          <span class="note">one paragraph per line — <code>*bold*</code> <code>`mark`</code> <code>_quiet_</code> <code>{label|url}</code></span>
+        </label>
+
+        <div class="row">
+          <span class="key">links</span>
+          <div id="menuRows" class="links"></div>
+          <button id="addLink" class="add" type="button">+ another</button>
+        </div>
+      </form>
+
+      <div id="view-config" class="config" hidden>
+        <textarea id="config" spellcheck="false" aria-label="me.config.js"></textarea>
+        <p id="configError" class="fault" hidden></p>
+      </div>
+    </div>
+
+    <div class="sheet-foot">
+      <button id="download" class="press" type="button">Download the package ↓</button>
+      <button id="copyConfig" class="quiet" type="button">Copy config</button>
+      <span id="status" class="status" role="status"></span>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────── proof ───────────────────────────── -->
+  <section class="proof" aria-label="Live proof">
+    <div class="proof-head">
+      <h1>Proof sheet</h1>
+      <div class="controls">
+        <label class="slider">
+          <span>columns</span>
+          <input id="width" type="range" min="24" max="120" value="80">
+          <output id="widthOut">80</output>
+        </label>
+        <button id="toggleColor" type="button" aria-pressed="false">spot colour</button>
+      </div>
+    </div>
+
+    <div class="proof-body">
+      <div class="sheet-white">
+        <span class="crop tl" aria-hidden="true"></span>
+        <span class="crop tr" aria-hidden="true"></span>
+        <span class="crop bl" aria-hidden="true"></span>
+        <span class="crop br" aria-hidden="true"></span>
+        <pre id="screen"></pre>
+        <p class="caption"><span id="termTitle">npx yourname</span> · set in one spot colour</p>
+      </div>
+    </div>
+
+    <div class="proof-foot">
+      <p>Unzip the download, then the only step left is <code>npm publish</code>.</p>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="press.js"></script>
+</body>
+</html>

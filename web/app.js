@@ -11,6 +11,8 @@
 import { renderCard, renderMenu } from '../src/render.js';
 import { setColor, setTruecolor, parseRuns, visibleWidth, stripAnsi } from '../src/ansi.js';
 import { toConfig, fromConfig, checkPackageName } from './config.js';
+import { zip, save } from './zip.js';
+import { loadRuntime, packageFiles } from './package.js';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, attrs = {}, ...kids) => {
@@ -112,6 +114,7 @@ function readForm() {
     };
   });
   syncConfigBox();
+  preview();
 }
 
 function writeForm() {
@@ -170,143 +173,7 @@ function showTab(name) {
   preview();
 }
 
-/* =================================================================== zip == */
-
-const CRC_TABLE = (() => {
-  const table = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    table[n] = c >>> 0;
-  }
-  return table;
-})();
-
-function crc32(bytes) {
-  let c = 0xffffffff;
-  for (const byte of bytes) c = CRC_TABLE[(c ^ byte) & 0xff] ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
-}
-
-async function deflate(bytes) {
-  if (typeof CompressionStream === 'undefined') return { bytes, method: 0 };
-  try {
-    const stream = new Blob([bytes])
-      .stream()
-      .pipeThrough(new CompressionStream('deflate-raw'));
-    const out = new Uint8Array(await new Response(stream).arrayBuffer());
-    return out.length < bytes.length ? { bytes: out, method: 8 } : { bytes, method: 0 };
-  } catch {
-    return { bytes, method: 0 };
-  }
-}
-
-/** Build a ZIP archive in the browser. Store or deflate, no dependencies. */
-async function zip(files) {
-  const encoder = new TextEncoder();
-  const parts = [];
-  const central = [];
-  let offset = 0;
-
-  for (const file of files) {
-    const name = encoder.encode(file.name);
-    const raw = encoder.encode(file.text);
-    const { bytes, method } = await deflate(raw);
-
-    const header = new Uint8Array(30 + name.length);
-    const view = new DataView(header.buffer);
-    view.setUint32(0, 0x04034b50, true);
-    view.setUint16(4, 20, true);
-    view.setUint16(8, method, true);
-    view.setUint32(14, crc32(raw), true);
-    view.setUint32(18, bytes.length, true);
-    view.setUint32(22, raw.length, true);
-    view.setUint16(26, name.length, true);
-    header.set(name, 30);
-
-    parts.push(header, bytes);
-    central.push({ name, crc: crc32(raw), size: bytes.length, raw: raw.length, offset });
-    offset += header.length + bytes.length;
-  }
-
-  const directory = new Uint8Array(
-    central.reduce((sum, f) => sum + 46 + f.name.length, 0),
-  );
-  const view = new DataView(directory.buffer);
-  let cursor = 0;
-  for (const f of central) {
-    view.setUint32(cursor, 0x02014b50, true);
-    view.setUint16(cursor + 4, 20, true);
-    view.setUint16(cursor + 8, 8, true); // deflate
-    view.setUint32(cursor + 16, f.crc, true);
-    view.setUint32(cursor + 20, f.size, true);
-    view.setUint32(cursor + 24, f.raw, true);
-    view.setUint16(cursor + 28, f.name.length, true);
-    view.setUint32(cursor + 42, f.offset, true);
-    directory.set(f.name, cursor + 46);
-    cursor += 46 + f.name.length;
-  }
-
-  const end = new Uint8Array(22);
-  const endView = new DataView(end.buffer);
-  endView.setUint32(0, 0x06054b50, true);
-  endView.setUint16(8, central.length, true);
-  endView.setUint16(10, central.length, true);
-  endView.setUint32(12, directory.length, true);
-  endView.setUint32(16, offset, true);
-
-  return new Blob([...parts, directory, end], { type: 'application/zip' });
-}
-
 /* ============================================================== download == */
-
-/** The files that make up a publishable package, besides the config. */
-const RUNTIME_FILES = [
-  'LICENSE',
-  'bin/card.js',
-  'src/ansi.js',
-  'src/render.js',
-  'src/menu.js',
-  'src/open.js',
-  'src/profile.js',
-  'src/default.js',
-];
-
-const readme = (profile) => `# ${profile.packageName}
-
-My terminal business card. Run \`npx ${profile.packageName}\`.
-
-Built with [terminal-card](https://github.com/atalayhuryasar/terminal-card).
-
-## License
-
-MIT
-`;
-
-const publishGuide = (profile) => `# Publishing
-
-Everything is ready. Three commands:
-
-\`\`\`bash
-cd ${profile.packageName}
-npm login          # first time only
-npm publish
-\`\`\`
-
-That is it — people can then run:
-
-\`\`\`bash
-npx ${profile.packageName}
-\`\`\`
-
-## Notes
-
-- The package name must still be free: \`npm view ${profile.packageName}\`
-  returns nothing when it is.
-- \`npm publish\` asks for a one-time 2FA code.
-- Package names cannot be changed after publishing.
-- Want to change something later? Edit \`me.config.js\` and \`npm publish\` again.
-`;
 
 async function download() {
   const button = $('download');
@@ -314,47 +181,8 @@ async function download() {
   $('status').textContent = 'Building…';
 
   try {
-    const files = [{ name: 'me.config.js', text: toConfig(state) }];
-
-    for (const name of RUNTIME_FILES) {
-      const response = await fetch(`../${name}`);
-      if (!response.ok) throw new Error(`could not load ${name} (${response.status})`);
-      files.push({ name, text: await response.text() });
-    }
-
-    files.push(
-      {
-        name: 'package.json',
-        text: `${JSON.stringify(
-          {
-            name: state.packageName,
-            version: '1.0.0',
-            description: `${state.name}'s terminal business card. Run \`npx ${state.packageName}\`.`,
-            keywords: ['cli', 'card', 'business-card', 'profile', 'terminal'],
-            homepage: `https://www.npmjs.com/package/${state.packageName}`,
-            license: 'MIT',
-            author: state.name,
-            type: 'module',
-            bin: { [state.packageName]: 'bin/card.js' },
-            files: ['bin', 'src', 'me.config.js', 'README.md', 'LICENSE'],
-            engines: { node: '>=18' },
-          },
-          null,
-          2,
-        )}\n`,
-      },
-      { name: 'README.md', text: readme(state) },
-      { name: 'PUBLISH.md', text: publishGuide(state) },
-    );
-
-    const blob = await zip(files);
-    const url = URL.createObjectURL(blob);
-    const link = el('a', { href: url, download: `${state.packageName}.zip` });
-    document.body.append(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-
+    const blob = await zip(packageFiles(state, await loadRuntime('../')));
+    save(blob, `${state.packageName}.zip`);
     $('status').textContent = `Downloaded ${state.packageName}.zip`;
   } catch (error) {
     $('status').textContent = '';
@@ -396,7 +224,6 @@ function init() {
       return;
     }
     readForm();
-    preview();
   });
 
   for (const tab of document.querySelectorAll('.tab')) {
@@ -446,18 +273,12 @@ function init() {
     renderCard,
     visibleWidth,
     zip,
+    save,
     toConfig,
     fromConfig,
     checkPackageName,
-    files: RUNTIME_FILES,
-    loadRuntime: async () => {
-      const out = [];
-      for (const name of RUNTIME_FILES) {
-        const response = await fetch(`../${name}`);
-        out.push({ name, text: response.ok ? await response.text() : null });
-      }
-      return out;
-    },
+    packageFiles,
+    loadRuntime: () => loadRuntime('../'),
   };
 }
 

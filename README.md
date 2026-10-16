@@ -131,9 +131,16 @@ Your friends now run `npx ada`.
   </a>
 </p>
 
-Fill in the form on the right and the card updates as you type. The preview is
-the **real renderer** — `src/render.js` is loaded straight from this
-repository — so what you see is what `npx` will print.
+There are two of them, and they do exactly the same thing:
+
+| | |
+| --- | --- |
+| [default](/terminal-card/web/) | the first one — dark, panels, the usual |
+| [press](/terminal-card/web/press/) | the second — paper, ink, one spot colour |
+
+Fill in the form and the card updates as you type. The preview is the **real
+renderer** — `src/render.js` is loaded straight from this repository — so what
+you see is what `npx` will print.
 
 Drag the width slider from 24 to 120 columns to watch it reflow, or turn
 colour off to see the plain layout.

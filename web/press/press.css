@@ -1,0 +1,408 @@
+/*
+  A printed-card aesthetic: paper, ink, one spot colour, hairline rules.
+  Everything sits on a grid, nothing is rounded, nothing glows.
+*/
+
+:root {
+  --paper: #f2efe6;
+  --paper-2: #e9e5d8;
+  --white: #fbfaf6;
+  --ink: #191714;
+  --ink-70: rgba(25, 23, 20, 0.7);
+  --ink-40: rgba(25, 23, 20, 0.4);
+  --ink-14: rgba(25, 23, 20, 0.14);
+  --ink-08: rgba(25, 23, 20, 0.08);
+  --spot: #d8412a;
+
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.5 var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Paper tooth. Cheap, static, and it stops the background reading as a screen. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+}
+
+body > *:not(.grain) { position: relative; z-index: 1; }
+
+/* ------------------------------------------------------------- masthead */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.mark { color: var(--spot); }
+
+.wordmark {
+  font-family: var(--serif);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.rule {
+  flex: 1;
+  height: 1px;
+  background: var(--ink-14);
+}
+
+.masthead nav { display: flex; gap: 18px; }
+
+.masthead a {
+  color: var(--ink-70);
+  text-decoration: none;
+  font-size: 12.5px;
+  border-bottom: 1px solid transparent;
+}
+
+.masthead a:hover { color: var(--ink); border-bottom-color: var(--spot); }
+
+/* ---------------------------------------------------------------- layout */
+
+main {
+  display: grid;
+  grid-template-columns: minmax(380px, 452px) 1fr;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  main { grid-template-columns: 1fr; }
+  .proof { border-left: 0; border-top: 1px solid var(--ink); }
+}
+
+.sheet { border-right: 1px solid var(--ink); min-height: calc(100vh - 52px); }
+
+@media (max-width: 960px) { .sheet { border-right: 0; } }
+
+/* ---------------------------------------------------------------- sheet */
+
+.sheet-head,
+.proof-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 28px;
+  border-bottom: 1px solid var(--ink-14);
+}
+
+.tab {
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 2px 0;
+  font-family: var(--mono);
+}
+
+.tab.is-on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--spot); }
+.tab:hover { color: var(--ink); }
+
+#reset {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--ink-40);
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+#reset:hover { color: var(--spot); }
+
+.sheet-body { padding: 26px 28px 30px; }
+
+/* ------------------------------------------------------------ form rows */
+
+.row { display: block; margin-bottom: 22px; }
+
+.key {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  margin-bottom: 6px;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--ink-14);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14.5px;
+  padding: 5px 0 7px;
+  resize: none;
+}
+
+textarea { line-height: 1.65; font-size: 13.5px; }
+
+input::placeholder,
+textarea::placeholder { color: var(--ink-14); }
+
+input:focus,
+textarea:focus {
+  outline: 0;
+  border-bottom-color: var(--ink);
+}
+
+input[aria-invalid='true'] { border-bottom-color: var(--spot); }
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; }
+@media (max-width: 520px) { .pair { grid-template-columns: 1fr; } }
+
+.note {
+  display: block;
+  margin-top: 7px;
+  font-size: 11.5px;
+  color: var(--ink-40);
+}
+
+.note.is-bad { color: var(--spot); }
+.note code { font-size: 11px; color: var(--ink-70); }
+
+/* ---------------------------------------------------------------- links */
+
+.links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+
+.link {
+  display: grid;
+  grid-template-columns: 30px 1fr 62px 1fr 22px;
+  gap: 8px;
+  align-items: center;
+}
+
+.link input {
+  font-size: 13px;
+  padding: 3px 0 5px;
+  border-bottom-color: var(--ink-08);
+}
+
+.link input:focus { border-bottom-color: var(--ink-40); }
+
+.link .drop {
+  border: 0;
+  background: none;
+  color: var(--ink-14);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.link .drop:hover { color: var(--spot); }
+
+@media (max-width: 640px) {
+  .link { grid-template-columns: 30px 1fr 22px; }
+  .link input:nth-child(3), .link input:nth-child(4) { grid-column: 2; }
+}
+
+.add {
+  border: 0;
+  border-bottom: 1px solid var(--ink-14);
+  background: none;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink-70);
+  padding: 2px 0 4px;
+  cursor: pointer;
+}
+
+.add:hover { color: var(--spot); border-bottom-color: var(--spot); }
+
+/* --------------------------------------------------------------- config */
+
+.config { padding: 26px 28px 30px; }
+
+.config textarea {
+  min-height: 460px;
+  background: var(--ink);
+  color: #e7e3d6;
+  border: 0;
+  padding: 18px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.fault {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  background: var(--spot);
+  color: var(--white);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+/* --------------------------------------------------------------- footer */
+
+.sheet-foot,
+.proof-foot {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--ink-14);
+}
+
+.press {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  padding: 9px 18px;
+  cursor: pointer;
+}
+
+.press:hover { background: var(--spot); border-color: var(--spot); }
+.press:disabled { opacity: 0.5; cursor: progress; }
+
+.quiet {
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink-40);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding: 2px 0;
+}
+
+.quiet:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+.status { font-size: 12px; color: var(--spot); }
+
+/* ---------------------------------------------------------------- proof */
+
+.proof-head h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.controls { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+
+.slider { display: flex; align-items: center; gap: 9px; }
+
+.slider span {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+
+.slider input { width: 150px; padding: 0; border: 0; accent-color: var(--spot); }
+.slider output { font-size: 12px; min-width: 22px; }
+
+#toggleColor {
+  border: 1px solid var(--ink-14);
+  background: none;
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-70);
+  padding: 5px 11px;
+  cursor: pointer;
+}
+
+#toggleColor[aria-pressed='true'] {
+  background: var(--spot);
+  border-color: var(--spot);
+  color: var(--white);
+}
+
+.proof-body { padding: 34px; }
+
+/* The card, printed on a slightly whiter stock than the page. */
+.sheet-white {
+  position: relative;
+  min-height: min(62vh, 560px);
+  background: var(--white);
+  border: 1px solid var(--ink-14);
+  padding: 30px 26px 22px;
+  overflow-x: auto;
+}
+
+#screen {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #23211d;
+  font-variant-ligatures: none;
+}
+
+#screen .line { white-space: pre; min-height: 1.45em; width: max-content; }
+
+.caption {
+  margin: 22px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--ink-08);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-40);
+}
+
+/* Registration marks: the detail that says someone set this by hand. */
+.crop {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  opacity: 0.35;
+}
+
+.crop::before, .crop::after {
+  content: '';
+  position: absolute;
+  background: var(--ink);
+}
+
+.crop::before { width: 100%; height: 1px; }
+.crop::after { width: 1px; height: 100%; }
+
+.crop.tl { top: 9px; left: 9px; }
+.crop.tr { top: 9px; right: 9px; transform: scaleX(-1); }
+.crop.bl { bottom: 9px; left: 9px; transform: scaleY(-1); }
+.crop.br { bottom: 9px; right: 9px; transform: scale(-1); }
+
+.proof-foot p { margin: 0; font-size: 12px; color: var(--ink-40); }
+.proof-foot code { color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .press { transition: background-color 110ms ease, border-color 110ms ease; }
+}
